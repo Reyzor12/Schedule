@@ -1,5 +1,8 @@
 package ru.eleron.osa.lris.schedule.configurations;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -8,12 +11,16 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.eleron.osa.lris.schedule.database", entityManagerFactoryRef = "sessionFactory")
@@ -25,14 +32,14 @@ public class JpaConfigurations {
     @Autowired
     private Environment environment;
 
-    @Bean
+    @Bean(destroyMethod = "close")
     public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
-        dataSource.setUrl(environment.getProperty("jdbc.url"));
-        dataSource.setUsername(environment.getProperty("jdbc.username"));
-        dataSource.setPassword(environment.getProperty("jdbc.password"));
-        return dataSource;
+        HikariConfig dataSourceConfig = new HikariConfig();
+        dataSourceConfig.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
+        dataSourceConfig.setJdbcUrl(environment.getProperty("jdbc.url"));
+        dataSourceConfig.setUsername(environment.getProperty("jdbc.username"));
+        dataSourceConfig.setPassword(environment.getProperty("jdbc.password"));
+        return new HikariDataSource(dataSourceConfig);
     }
 
     @Bean
@@ -40,7 +47,20 @@ public class JpaConfigurations {
         LocalContainerEntityManagerFactoryBean sessionFactory = new LocalContainerEntityManagerFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        sessionFactory.setJpaProperties(additionalProperties());
+        sessionFactory.setPackagesToScan("ru.eleron.osa.lris.schedule.database.entities");
+
+        Properties jpaProperties = new Properties();
+        jpaProperties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
+        jpaProperties.put("hibernate.dialect", environment.getProperty("hibernate.dialect"));
+        sessionFactory.setJpaProperties(jpaProperties);
         return sessionFactory;
+    }
+
+    @Bean
+    @Autowired
+    public PlatformTransactionManager transactionManager(EntityManagerFactory sessionFactory) {
+        JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(sessionFactory);
+        return txManager;
     }
 }

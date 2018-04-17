@@ -1,7 +1,7 @@
 package ru.eleron.osa.lris.schedule.database.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.eleron.osa.lris.schedule.database.entities.base.BaseTask;
+import ru.eleron.osa.lris.schedule.database.entities.Task;
 
-public interface TaskDao extends JpaRepository<BaseTask, Long> {
+public interface TaskDao extends JpaRepository<Task, Long> {
 }

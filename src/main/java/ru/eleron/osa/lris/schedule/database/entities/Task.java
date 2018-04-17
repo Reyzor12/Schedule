@@ -1,71 +1,78 @@
 package ru.eleron.osa.lris.schedule.database.entities;
 
-import ru.eleron.osa.lris.schedule.database.entities.base.BaseTask;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "task")
-public class Task extends EntityPrototype implements BaseTask{
+public class Task extends EntityPrototype {
     @Column(name = "name")
     private String name;
     @Column(name = "score")
     private Integer score;
     @Column(name = "time")
     private Integer time;
-    @OneToMany
-    private List<BaseTask> baseTaskList;
 
-    public String getName() {
-        return null;
+    public Task() {
     }
 
-    public void setName(String newName) {
+    public Task(String name, Integer score, Integer time) {
+        this.name = name;
+        this.score = score;
+        this.time = time;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getScore() {
-        return null;
+        return score;
     }
 
     public void setScore(Integer score) {
-
+        this.score = score;
     }
 
-    public Integer getTimeInMinutes() {
-        return null;
+    public Integer getTime() {
+        return time;
     }
 
-    public void setTimeInMinutes() {
-
+    public void setTime(Integer time) {
+        this.time = time;
     }
 
-    public List<BaseTask> getChildrens() {
-        return null;
+    @Override
+    public String toString() {
+        return "Task{" +
+                "name='" + name + '\'' +
+                ", score=" + score +
+                ", time=" + time +
+                '}';
     }
 
-    public void setChildrens(Collection<BaseTask> baseTaskCollection) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Task task = (Task) o;
+
+        if (name != null ? !name.equals(task.name) : task.name != null) return false;
+        if (score != null ? !score.equals(task.score) : task.score != null) return false;
+        return time != null ? time.equals(task.time) : task.time == null;
     }
 
-    public void addChildrens(Collection<BaseTask> baseTaskCollection) {
-
-    }
-
-    public void addChildrens(BaseTask baseTask) {
-
-    }
-
-    public void removeChildrens(Collection<BaseTask> baseTaskCollection) {
-
-    }
-
-    public void removeChildrens(BaseTask baseTask) {
-
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (score != null ? score.hashCode() : 0);
+        result = 31 * result + (time != null ? time.hashCode() : 0);
+        return result;
     }
 }
