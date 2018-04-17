@@ -1,0 +1,1 @@
+insert into task(id, name, score) values(1, 'abc', 123);

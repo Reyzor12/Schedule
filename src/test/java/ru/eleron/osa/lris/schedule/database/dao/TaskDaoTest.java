@@ -3,6 +3,7 @@ package ru.eleron.osa.lris.schedule.database.dao;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,8 +11,11 @@ import ru.eleron.osa.lris.schedule.configurations.JpaConfigurations;
 import ru.eleron.osa.lris.schedule.database.entities.Task;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 
-import static org.junit.Assert.assertFalse;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -21,6 +25,10 @@ public class TaskDaoTest {
 
     @Resource
     private TaskDao taskDao;
+
+    @Autowired
+    //@Qualifier("sessionFactory")
+    private EntityManager sessionFactory;
 
     private Task task1;
 
@@ -36,7 +44,8 @@ public class TaskDaoTest {
     public void addToDb() {
         assertTrue(task1 != null);
         taskDao.save(task1);
-        Task task2 = (Task) taskDao.getOne(1l);
+        Task task2 = (Task) taskDao.getOne(2l);
+        System.out.println(taskDao.findAll());
         assertTrue(task2 != null);
         assertTrue(task1.equals(task2));
         assertTrue(task2.getName().equals(task1.getName()));
