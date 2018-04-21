@@ -8,7 +8,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import ru.eleron.osa.lris.schedule.configurations.JpaConfigurations;
+import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.Task;
+import ru.eleron.osa.lris.schedule.database.patterns.CompositePatternForTask;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
@@ -49,5 +51,11 @@ public class TaskDaoTest {
         assertTrue(task2 != null);
         assertTrue(task1.equals(task2));
         assertTrue(task2.getName().equals(task1.getName()));
+    }
+
+    @Test
+    public void createEmptyAndSaveCompositeTask() {
+        CompositePatternForTask compositeTask = new CompositeTask();
+        
     }
 }
