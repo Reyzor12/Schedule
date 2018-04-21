@@ -1,1 +1,1 @@
-insert into task(id, name, score) values(1, 'abc', 123);
+insert into composite_task(id, name, score, time) values(1, 'abc', 123, 321);
