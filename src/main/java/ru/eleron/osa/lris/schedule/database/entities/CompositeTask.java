@@ -25,33 +25,39 @@ public class CompositeTask extends EntityPrototype implements CompositePatternFo
         children = new ArrayList<>();
     }
 
-    public Integer getChildrenTime() {
-        if (hasChildren()) return this.children.stream().mapToInt(Task::getChildrenTime).sum();
-        return 0;
+    public CompositeTask(String name, List<CompositeTask> compositeTaskList) {
+        this.name = name;
+        if (compositeTaskList == null || compositeTaskList.isEmpty()) {
+            this.score = 0;
+            this.time = 0;
+        } else {
+            this.score = compositeTaskList.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
+            this.time = compositeTaskList.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
+        }
     }
 
-    public List<Task> getChildren() {
+    public List<CompositePatternForTask> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Task> taskList) {
-        if (taskList != null) this.children = taskList;
+    public void setChildren(List<CompositePatternForTask> compositePatternForTaskList) {
+        if (compositePatternForTaskList != null) this.children = compositePatternForTaskList;
     }
 
-    public void addChildren(List<Task> taskList) {
-        if (taskList != null) this.children.addAll(taskList);
+    public void addChildren(List<CompositePatternForTask> compositePatternForTaskList) {
+        if (compositePatternForTaskList != null) this.children.addAll(compositePatternForTaskList);
     }
 
-    public void addChild(Task task) {
-        if (task != null) this.children.add(task);
+    public void addChild(CompositePatternForTask compositePatternForTask) {
+        if (compositePatternForTask != null) this.children.add(compositePatternForTask);
     }
 
-    public void removeChild(Task task) {
-        if (task != null) this.children.remove(task);
+    public void removeChild(CompositePatternForTask compositePatternForTask) {
+        if (compositePatternForTask != null) this.children.remove(compositePatternForTask);
     }
 
-    public void removeChildren(List<Task> taskList) {
-        if (taskList != null) this.children.removeAll(taskList);
+    public void removeChildren(List<CompositePatternForTask> compositePatternForTaskList) {
+        if (compositePatternForTaskList != null) this.children.removeAll(compositePatternForTaskList);
     }
 
     public void removeAllChildren() {
@@ -62,34 +68,45 @@ public class CompositeTask extends EntityPrototype implements CompositePatternFo
         return !this.children.isEmpty();
     }
 
-
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
     public void setName(String name) {
-
+        this.name = name;
     }
 
     @Override
     public Integer getScore() {
-        return null;
+        return score;
     }
 
     @Override
     public void setScore(Integer score) {
-
+        if (children == null || children.isEmpty()) {
+            this.score = 0;
+            this.time = 0;
+        } else {
+            this.score = children.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
+            this.time = children.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
+        }
     }
 
     @Override
     public Integer getTime() {
-        return null;
+        return time;
     }
 
     @Override
     public void setTime(Integer time) {
-
+        if (compositeTaskList == null || compositeTaskList.isEmpty()) {
+            this.score = 0;
+            this.time = 0;
+        } else {
+            this.score = compositeTaskList.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
+            this.time = compositeTaskList.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
+        }
     }
 }
