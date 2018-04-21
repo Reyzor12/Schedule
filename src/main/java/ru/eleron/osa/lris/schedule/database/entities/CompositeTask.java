@@ -32,7 +32,7 @@ public class CompositeTask extends EntityPrototype implements CompositePatternFo
             this.time = 0;
         } else {
             this.score = compositeTaskList.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
-            this.time = compositeTaskList.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
+            this.time = compositeTaskList.stream().mapToInt(compositeTask -> compositeTask.getTime()).sum();
         }
     }
 
@@ -87,10 +87,8 @@ public class CompositeTask extends EntityPrototype implements CompositePatternFo
     public void setScore(Integer score) {
         if (children == null || children.isEmpty()) {
             this.score = 0;
-            this.time = 0;
         } else {
             this.score = children.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
-            this.time = children.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
         }
     }
 
@@ -101,12 +99,12 @@ public class CompositeTask extends EntityPrototype implements CompositePatternFo
 
     @Override
     public void setTime(Integer time) {
-        if (compositeTaskList == null || compositeTaskList.isEmpty()) {
-            this.score = 0;
+        if (children == null || children.isEmpty()) {
             this.time = 0;
         } else {
-            this.score = compositeTaskList.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
-            this.time = compositeTaskList.stream().mapToInt(compositeTask -> compositeTask.getScore()).sum();
+            this.time = children.stream().mapToInt(compositeTask -> compositeTask.getTime()).sum();
         }
     }
+
+    //TODO toString equals hash
 }
