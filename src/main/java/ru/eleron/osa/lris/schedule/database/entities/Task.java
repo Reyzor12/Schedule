@@ -1,5 +1,7 @@
 package ru.eleron.osa.lris.schedule.database.entities;
 
+import ru.eleron.osa.lris.schedule.database.patterns.CompositePatternForTask;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -9,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "task")
-public class Task extends EntityPrototype {
+public class Task extends EntityPrototype implements CompositePatternForTask {
 
     public static final Integer DEFAULT_SCORE = 0;
     public static final Integer DEFAULT_TIME = 0;
@@ -20,87 +22,41 @@ public class Task extends EntityPrototype {
     private Integer score;
     @Column(name = "time")
     private Integer time;
-    @OneToMany
-    private List<Task> children;
 
     public Task() {
+        this.name = "";
         this.score = 0;
         this.time = 0;
-        this.children = new ArrayList<>();
     }
 
     public Task(String name, Integer score, Integer time) {
         this.name = name;
         this.score = score < 0 ? 0 : score;
         this.time = time < 0 ? 0 : time;
-        this.children = new ArrayList<>();
     }
 
+    @Override
     public String getName() {
         return name;
     }
-
+    @Override
     public void setName(String name) {
         this.name = name;
     }
-
+    @Override
     public Integer getScore() {
         return score;
     }
-
+    @Override
     public void setScore(Integer score) {
-        this.score = (score < 0 ? 0 : score) + getChildrenScore();
+        this.score = score < 0 ? 0 : score;
     }
-
-    public Integer getChildrenScore() {
-        if (hasChildren()) return this.children.stream().mapToInt(Task::getChildrenScore).sum();
-        return 0;
-    }
-
+    @Override
     public Integer getTime() {
         return time;
     }
-
-    public void setTime(Integer time) {
-        this.time = (time < 0 ? 0 : time) + getChildrenTime();
-    }
-
-    public Integer getChildrenTime() {
-        if (hasChildren()) return this.children.stream().mapToInt(Task::getChildrenTime).sum();
-        return 0;
-    }
-
-    public List<Task> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<Task> taskList) {
-        if (taskList != null) this.children = taskList;
-    }
-
-    public void addChildren(List<Task> taskList) {
-        if (taskList != null) this.children.addAll(taskList);
-    }
-
-    public void addChild(Task task) {
-        if (task != null) this.children.add(task);
-    }
-
-    public void removeChild(Task task) {
-        if (task != null) this.children.remove(task);
-    }
-
-    public void removeChildren(List<Task> taskList) {
-        if (taskList != null) this.children.removeAll(taskList);
-    }
-
-    public void removeAllChildren() {
-        this.children.clear();
-    }
-
-    public boolean hasChildren() {
-        return !this.children.isEmpty();
-    }
+    @Override
+    public void setTime(Integer time) { this.time = time < 0 ? 0 : time; }
 
     @Override
     public String toString() {
