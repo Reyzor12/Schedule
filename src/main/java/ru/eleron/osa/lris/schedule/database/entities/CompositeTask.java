@@ -1,13 +1,16 @@
 package ru.eleron.osa.lris.schedule.database.entities;
 
+import ru.eleron.osa.lris.schedule.database.patterns.ClonnableObject;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "composite_task")
-public class CompositeTask extends EntityPrototype {
+public class CompositeTask extends EntityPrototype implements ClonnableObject<CompositeTask> {
 
     public static final Integer DEFAULT_SCORE = 0;
     public static final Integer DEFAULT_TIME = 0;
@@ -37,6 +40,14 @@ public class CompositeTask extends EntityPrototype {
             this.score = compositeTaskList.stream().mapToInt(CompositeTask::getScore).sum();
             this.time = compositeTaskList.stream().mapToInt(CompositeTask::getTime).sum();
         }
+    }
+
+    public CompositeTask(CompositeTask compositeTask) {
+        this.name = compositeTask.getName();
+        this.score = compositeTask.getScore();
+        this.time = compositeTask.getTime();
+        final List<CompositeTask> anotherChildren = compositeTask.getChildren();
+        this.children = anotherChildren == null ? null : (anotherChildren.isEmpty() ? new ArrayList<>() : anotherChildren.stream().map(compositeTask1 -> compositeTask1.clone()).collect(Collectors.toList()));
     }
 
     public boolean isTask() {
@@ -151,6 +162,11 @@ public class CompositeTask extends EntityPrototype {
     @Override
     public int hashCode() {
 
-        return Objects.hash(name, time, score, children);
+        return Objects.hash(name, time, score);
+    }
+
+    @Override
+    public CompositeTask clone() {
+        return new CompositeTask(this);
     }
 }

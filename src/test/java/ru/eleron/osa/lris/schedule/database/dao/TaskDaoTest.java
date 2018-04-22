@@ -1,5 +1,6 @@
 package ru.eleron.osa.lris.schedule.database.dao;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,8 @@ public class TaskDaoTest {
     private EntityManager sessionFactory;
 
     private CompositeTask compositeTask;
-    private CompositeTask compositeTask1;
+    private CompositeTask leaf;
+    private CompositeTask anotherLeaf;
 
     @Before
     public void initData() {
@@ -36,14 +38,23 @@ public class TaskDaoTest {
         compositeTask.setName("Name");
         compositeTask.setScore(123);
         compositeTask.setTime(321);
-        compositeTask1 = new CompositeTask();
+        leaf = new CompositeTask("List", null);
+        leaf.setScore(100);
+        leaf.setTime(200);
+        compositeTask.addChild(leaf);
+        anotherLeaf = new CompositeTask("Another Leaf", null);
+        anotherLeaf.setScore(55);
+        anotherLeaf.setTime(22);
+        compositeTask.addChild(anotherLeaf);
     }
 
     @Test
     public void addToDb() {
         assertTrue(compositeTask != null);
+        taskDao.save(leaf);
+        taskDao.save(anotherLeaf);
         taskDao.save(compositeTask);
-        CompositeTask task2 = (CompositeTask) taskDao.getOne(2l);
+        CompositeTask task2 = (CompositeTask) taskDao.getOne(4l);
         System.out.println(taskDao.findAll());
         assertTrue(task2 != null);
         assertTrue(compositeTask.equals(task2));
@@ -51,8 +62,25 @@ public class TaskDaoTest {
     }
 
     @Test
-    public void createEmptyAndSaveCompositeTask() {
-        CompositeTask compositeTask = new CompositeTask();
-        
+    public void testCloneForCompositeTask() {
+        CompositeTask cloneCompositeTask = compositeTask.clone();
+        System.out.println("cloneCompositeTask = " + cloneCompositeTask);
+        System.out.println("cloneCompositeTask.getChildren() = " + cloneCompositeTask.getChildren());
+        System.out.println("compositeTask = " + compositeTask);
+        System.out.println("compositeTask.getChildren() = " + compositeTask.getChildren());
+        assertTrue(cloneCompositeTask.equals(compositeTask));
+        assertTrue(cloneCompositeTask.getChildren().equals(compositeTask.getChildren()));
+    }
+    @Test
+    public void testIncludeElements() {
+        CompositeTask task1 = new CompositeTask();
+        CompositeTask task2 = new CompositeTask();
+        task1.addChild(leaf);
+        task1.addChild(anotherLeaf);
+        task2.addChild(anotherLeaf);
+        task2.addChild(leaf);
+        System.out.println(task1.getChildren());
+        System.out.println(task2.getChildren());
+        Assert.assertFalse(task1.getChildren().equals(task2.getChildren()));
     }
 }
