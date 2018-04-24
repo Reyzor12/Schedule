@@ -10,9 +10,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 import ru.eleron.osa.lris.schedule.configurations.JpaConfigurations;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
+import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
+
+import java.util.Date;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.junit.Assert.assertTrue;
 
@@ -23,6 +30,8 @@ public class TaskDaoTest {
 
     @Resource
     private TaskDao taskDao;
+    @Resource
+    private ProxyCompositeTaskDao proxyCompositeTaskDao;
 
     @Autowired
     //@Qualifier("sessionFactory")
@@ -31,6 +40,7 @@ public class TaskDaoTest {
     private CompositeTask compositeTask;
     private CompositeTask leaf;
     private CompositeTask anotherLeaf;
+    private ProxyCompositeTask proxyCompositeTask;
 
     @Before
     public void initData() {
@@ -46,6 +56,7 @@ public class TaskDaoTest {
         anotherLeaf.setScore(55);
         anotherLeaf.setTime(22);
         compositeTask.addChild(anotherLeaf);
+        proxyCompositeTask = new ProxyCompositeTask(new Date(), compositeTask);
     }
 
     @Test
@@ -59,6 +70,7 @@ public class TaskDaoTest {
         assertTrue(task2 != null);
         assertTrue(compositeTask.equals(task2));
         assertTrue(task2.getName().equals(compositeTask.getName()));
+
     }
 
     @Test
@@ -82,5 +94,15 @@ public class TaskDaoTest {
         System.out.println(task1.getChildren());
         System.out.println(task2.getChildren());
         Assert.assertFalse(task1.getChildren().equals(task2.getChildren()));
+    }
+
+    @Test
+    public void saveAndDeleteProxyCompositeTask() {
+        proxyCompositeTaskDao.save(proxyCompositeTask);
+        ProxyCompositeTask anotherProxyCompositeTask = (ProxyCompositeTask) proxyCompositeTaskDao.findOne(1l);
+        assertTrue(anotherProxyCompositeTask != null);
+        assertTrue(anotherProxyCompositeTask.getCompositeTask().equals(compositeTask));
+        proxyCompositeTaskDao.delete(1l);
+        assertTrue(StreamSupport.stream(Spliterators.spliteratorUnknownSize(proxyCompositeTaskDao.findAll().iterator(), Spliterator.ORDERED), false).collect(Collectors.toList()).isEmpty());
     }
 }
