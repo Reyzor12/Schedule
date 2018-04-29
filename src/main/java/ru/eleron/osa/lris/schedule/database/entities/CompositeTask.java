@@ -2,7 +2,10 @@ package ru.eleron.osa.lris.schedule.database.entities;
 
 import ru.eleron.osa.lris.schedule.database.patterns.ClonnableObject;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
