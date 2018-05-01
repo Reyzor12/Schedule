@@ -22,9 +22,16 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * Class JPA configuration
+ * @author Reyzor
+ * @version 1.0
+ * @since 30.04.2018
+ * */
+
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.eleron.osa.lris.schedule.database", entityManagerFactoryRef = "sessionFactory")
-@PropertySource("db.properties")
+@PropertySource("classpath:db.properties")
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"ru.eleron.osa.lris.schedule"})
 public class JpaConfigurations {
@@ -52,6 +59,7 @@ public class JpaConfigurations {
         Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
         jpaProperties.put("hibernate.dialect", environment.getProperty("hibernate.dialect"));
+        jpaProperties.put("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
         sessionFactory.setJpaProperties(jpaProperties);
         return sessionFactory;
     }

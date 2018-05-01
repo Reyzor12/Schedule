@@ -34,7 +34,6 @@ public class TaskDaoTest {
     private ProxyCompositeTaskDao proxyCompositeTaskDao;
 
     @Autowired
-    //@Qualifier("sessionFactory")
     private EntityManager sessionFactory;
 
     private CompositeTask compositeTask;
@@ -56,7 +55,7 @@ public class TaskDaoTest {
         anotherLeaf.setScore(55);
         anotherLeaf.setTime(22);
         compositeTask.addChild(anotherLeaf);
-        proxyCompositeTask = new ProxyCompositeTask(new Date(), compositeTask);
+        proxyCompositeTask = new ProxyCompositeTask(new Date(), compositeTask, "Proxy 2");
     }
 
     @Test
@@ -65,7 +64,7 @@ public class TaskDaoTest {
         taskDao.save(leaf);
         taskDao.save(anotherLeaf);
         taskDao.save(compositeTask);
-        CompositeTask task2 = (CompositeTask) taskDao.getOne(4l);
+        CompositeTask task2 = (CompositeTask) taskDao.getByName("Name");
         System.out.println(taskDao.findAll());
         assertTrue(task2 != null);
         assertTrue(compositeTask.equals(task2));
@@ -99,10 +98,19 @@ public class TaskDaoTest {
     @Test
     public void saveAndDeleteProxyCompositeTask() {
         proxyCompositeTaskDao.save(proxyCompositeTask);
-        ProxyCompositeTask anotherProxyCompositeTask = (ProxyCompositeTask) proxyCompositeTaskDao.findOne(1l);
+        System.out.println("proxyCompositeTask = " + proxyCompositeTask);
+        System.out.println("all = " + proxyCompositeTaskDao.findAll());
+        ProxyCompositeTask anotherProxyCompositeTask = proxyCompositeTaskDao.findByName("Proxy 2");
         assertTrue(anotherProxyCompositeTask != null);
         assertTrue(anotherProxyCompositeTask.getCompositeTask().equals(compositeTask));
-        proxyCompositeTaskDao.delete(1l);
-        assertTrue(StreamSupport.stream(Spliterators.spliteratorUnknownSize(proxyCompositeTaskDao.findAll().iterator(), Spliterator.ORDERED), false).collect(Collectors.toList()).isEmpty());
+        //proxyCompositeTaskDao.delete(2l);
+        //assertTrue(StreamSupport.stream(Spliterators.spliteratorUnknownSize(proxyCompositeTaskDao.findAll().iterator(), Spliterator.ORDERED), false).collect(Collectors.toList()).isEmpty());
+    }
+
+    @Test
+    public void crudModelForProxyTest() {
+        ProxyCompositeTask proxyCompositeTask1 = proxyCompositeTaskDao.findByName("hello world");
+        assertTrue(proxyCompositeTask1 != null);
+        assertTrue(proxyCompositeTask1.getName().equals("hello world"));
     }
 }

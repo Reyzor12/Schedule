@@ -11,17 +11,21 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "proxy_composite_task")
 public class ProxyCompositeTask extends EntityPrototype {
+
+    @Column(name = "name")
+    private String name;
     @Column(name = "start")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date date;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "entity")
     private CompositeTask compositeTask;
 
     public ProxyCompositeTask() {}
-    public ProxyCompositeTask(Date date, CompositeTask compositeTask) {
+    public ProxyCompositeTask(Date date, CompositeTask compositeTask, String name) {
         this.date = date;
         this.compositeTask = compositeTask;
+        this.name = name;
     }
 
     public List<String> generateStatistic(CompositeTask composite) {
@@ -48,13 +52,20 @@ public class ProxyCompositeTask extends EntityPrototype {
         return compositeTask;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public String toString() {
         return "ProxyCompositeTask{" +
                 "date=" + date +
                 ", compositeTask=" + compositeTask.getName() +
+                ", name = " + name +
                 '}';
     }
 
@@ -65,13 +76,15 @@ public class ProxyCompositeTask extends EntityPrototype {
 
         ProxyCompositeTask that = (ProxyCompositeTask) o;
 
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         return compositeTask != null ? compositeTask.equals(that.compositeTask) : that.compositeTask == null;
     }
 
     @Override
     public int hashCode() {
-        int result = date != null ? date.hashCode() : 0;
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (compositeTask != null ? compositeTask.hashCode() : 0);
         return result;
     }
