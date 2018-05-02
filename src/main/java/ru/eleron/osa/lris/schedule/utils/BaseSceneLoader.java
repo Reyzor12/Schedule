@@ -9,5 +9,7 @@ package ru.eleron.osa.lris.schedule.utils;
 
 public interface BaseSceneLoader {
 
+    void loadScene(String url, Integer width, Integer height);
     void loadScene(String url);
+    void loadScene(String url, Integer minWidth, Integer minHeight, Integer maxWidth, Integer maxHeight, Integer width, Integer height);
 }

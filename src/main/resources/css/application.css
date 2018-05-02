@@ -1,0 +1,19 @@
+#pane-main {
+    -fx-background-color: black;
+}
+
+#pane {
+    -fx-border-width: 10px;
+    -fx-border-color: #306030;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-background-color: #304030;
+    -fx-font: 16pt "Courier New";
+}
+
+#label-text-1 {
+    -fx-background-color: transparent;
+    -fx-font: 24pt "Courier New";
+    -fx-text-fill: #00E020;
+    -fx-alignment: center;
+}

@@ -3,8 +3,7 @@ package ru.eleron.osa.lris.schedule.utils;
 import javafx.fxml.FXMLLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.eleron.osa.lris.schedule.configurations.SpringContextConfiguration;
+import ru.eleron.osa.lris.schedule.MainApp;
 
 import java.io.IOException;
 
@@ -21,16 +20,13 @@ public class SpringFxmlLoader {
 
     private static final Logger logger = LogManager.getLogger(SpringFxmlLoader.class);
 
-    private static final AnnotationConfigApplicationContext APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(SpringContextConfiguration.class);
-
     public SpringFxmlLoader() {
-        APPLICATION_CONTEXT.refresh();
     }
 
     public Object load(String url) {
         logger.info("try load scene " + url);
         FXMLLoader loader = new FXMLLoader();
-        loader.setControllerFactory(clazz -> APPLICATION_CONTEXT.getBean(clazz));
+        loader.setControllerFactory(clazz -> MainApp.APPLICATION_CONTEXT.getBean(clazz));
         loader.setLocation(getClass().getClassLoader().getResource(url));
         try {
             return loader.load();
