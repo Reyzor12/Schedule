@@ -6,8 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.eleron.osa.lris.schedule.configurations.SpringContextConfiguration;
-import ru.eleron.osa.lris.schedule.utils.BaseSceneLoader;
-import ru.eleron.osa.lris.schedule.utils.SceneLoader;
+import ru.eleron.osa.lris.schedule.utils.load.BaseSceneLoader;
+import ru.eleron.osa.lris.schedule.utils.load.SceneLoader;
 
 public class MainApp extends Application  {
 

@@ -1,4 +1,4 @@
-package ru.eleron.osa.lris.schedule.utils;
+package ru.eleron.osa.lris.schedule.utils.load;
 
 import javafx.fxml.FXMLLoader;
 import org.apache.logging.log4j.LogManager;

@@ -50,6 +50,11 @@
     -fx-border-insets: 0 -3 0 0;
 }
 
+#table-view-1 .placeholder .label {
+    -fx-font: 14pt "Courier New";
+    -fx-text-fill: #00E020;
+}
+
 #button-1 {
     -fx-border-color: #00E020;
     -fx-border-width: 3px;

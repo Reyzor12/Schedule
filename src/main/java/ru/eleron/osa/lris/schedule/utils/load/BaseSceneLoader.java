@@ -1,4 +1,4 @@
-package ru.eleron.osa.lris.schedule.utils;
+package ru.eleron.osa.lris.schedule.utils.load;
 
 /**
  * Base interface for load scene

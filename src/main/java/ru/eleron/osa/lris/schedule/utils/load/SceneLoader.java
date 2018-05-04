@@ -1,4 +1,4 @@
-package ru.eleron.osa.lris.schedule.utils;
+package ru.eleron.osa.lris.schedule.utils.load;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.utils.storage.ConstantsSittings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,14 +26,14 @@ public class SceneLoader implements BaseSceneLoader {
      * Default sittings
      * */
 
-    private final static String TITLE = "ПЛАНИРОВЩИК ДЕЛ";
-    private final static String ICON_PATH = "/images/icons/SceduleIcon.png";
-    private final static Integer MIN_WIDTH = 1024;
-    private final static Integer MIN_HEIGHT = 720;
-    private final static Integer MAX_WIDTH = 1920;
-    private final static Integer MAX_HEIGHT = 1080;
-    private final static Integer DEFAULT_WIDTH = 1024;
-    private final static Integer DEFAULT_HEIGHT = 720;
+    private final static String TITLE = ConstantsSittings.APPLICATION_TITLE.getStringConstant();
+    private final static String ICON_PATH = ConstantsSittings.APPLICATION_ICON_PATH.getStringConstant();
+    private final static Integer MIN_WIDTH = ConstantsSittings.APPLICATION_MAIN_WINDOW_MIN_WIDTH.getIntegerConstant();
+    private final static Integer MIN_HEIGHT = ConstantsSittings.APPLICATION_MAIN_WINDOW_MIN_HEIGHT.getIntegerConstant();
+    private final static Integer MAX_WIDTH = ConstantsSittings.APPLICATION_MAIN_WINDOW_MAX_WIDTH.getIntegerConstant();
+    private final static Integer MAX_HEIGHT = ConstantsSittings.APPLICATION_MAIN_WINDOW_MAX_HEIGHT.getIntegerConstant();
+    private final static Integer DEFAULT_WIDTH = ConstantsSittings.APPLICATION_MAIN_WINDOW_DEFAULT_WIDTH.getIntegerConstant();
+    private final static Integer DEFAULT_HEIGHT = ConstantsSittings.APPLICATION_MAIN_WINDOW_DEFAULT_HEIGHT.getIntegerConstant();
 
     private final static Logger logger = LogManager.getLogger(SceneLoader.class);
 
