@@ -4,5 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTaskProxyCompositeKey;
 import ru.eleron.osa.lris.schedule.database.entities.StatisticClass;
 
-public interface StatisticClassDao extends CrudRepository<StatisticClass, CompositeTaskProxyCompositeKey> {
+public interface StatisticClassDao extends CrudRepository<StatisticClass, CompositeTaskProxyCompositeKey>
+{
 }

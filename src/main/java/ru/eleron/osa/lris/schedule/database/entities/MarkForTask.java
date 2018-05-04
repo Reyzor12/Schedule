@@ -12,7 +12,8 @@ package ru.eleron.osa.lris.schedule.database.entities;
  * @since 30.04.2018
  * */
 
-public enum MarkForTask {
+public enum MarkForTask
+{
 
     MARK_A(1f),
     MARK_B(0.75f),
@@ -24,11 +25,13 @@ public enum MarkForTask {
 
     MarkForTask(){}
 
-    MarkForTask(Float mark) {
+    MarkForTask(Float mark)
+    {
         this.mark = mark;
     }
 
-    public Float getMark() {
+    public Float getMark()
+    {
         return mark;
     }
 }

@@ -7,13 +7,15 @@ package ru.eleron.osa.lris.schedule.utils.storage;
  * @since 04.05.2018
  * */
 
-public enum ConstantsForElements {
+public enum ConstantsForElements
+{
 
     EMPTY_CURRENT_TASK_TABLE("Задачи на сегодня отсутствуют");
 
     private String message;
 
-    ConstantsForElements(String message) {
+    ConstantsForElements(String message)
+    {
         this.message = message;
     }
 

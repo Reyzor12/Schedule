@@ -1,13 +1,17 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
 import ru.eleron.osa.lris.schedule.utils.load.BaseSceneLoader;
+import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
 
 /**
@@ -18,7 +22,8 @@ import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
  * */
 
 @Component
-public class MainMenuController {
+public class MainMenuController
+{
 
     @FXML
     private TableView<ProxyCompositeTask> taskTableView;
@@ -30,9 +35,13 @@ public class MainMenuController {
     private TableColumn<ProxyCompositeTask, String> taskEndColumn;
     @FXML
     private TableColumn<ProxyCompositeTask, String> taskMarkColumn;
+    @FXML
+    private AnchorPane informationAnchorPane;
 
     @Autowired
     private BaseSceneLoader sceneLoader;
+    @Autowired
+    private SpringFxmlLoader springFxmlLoader;
 
     public void initialize()
     {
@@ -59,6 +68,8 @@ public class MainMenuController {
 
     public void onClick()
     {
-        sceneLoader.loadScene("frame/MainMenu.fxml", 900, 1000);
+        //sceneLoader.loadScene("frame/MainMenu.fxml", 900, 1000);
+        informationAnchorPane.getChildren().clear();
+        informationAnchorPane.getChildren().add((Node) springFxmlLoader.load("frame/hello.fxml"));
     }
 }

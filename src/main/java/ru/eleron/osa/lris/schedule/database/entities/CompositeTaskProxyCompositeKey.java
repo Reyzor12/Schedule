@@ -6,7 +6,8 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
-public class CompositeTaskProxyCompositeKey implements Serializable{
+public class CompositeTaskProxyCompositeKey implements Serializable
+{
 
     @ManyToOne
     @JoinColumn(name = "proxy_composite_task_id")
@@ -16,29 +17,35 @@ public class CompositeTaskProxyCompositeKey implements Serializable{
     private CompositeTask compositeTask;
 
     public CompositeTaskProxyCompositeKey(){}
-    public CompositeTaskProxyCompositeKey(CompositeTask compositeTask, ProxyCompositeTask proxyCompositeTask) {
+    public CompositeTaskProxyCompositeKey(CompositeTask compositeTask, ProxyCompositeTask proxyCompositeTask)
+    {
         this.compositeTask = compositeTask;
         this.proxyCompositeTask = proxyCompositeTask;
     }
 
-    public ProxyCompositeTask getProxyCompositeTask() {
+    public ProxyCompositeTask getProxyCompositeTask()
+    {
         return proxyCompositeTask;
     }
 
-    public void setProxyCompositeTask(ProxyCompositeTask proxyCompositeTask) {
+    public void setProxyCompositeTask(ProxyCompositeTask proxyCompositeTask)
+    {
         this.proxyCompositeTask = proxyCompositeTask;
     }
 
-    public CompositeTask getCompositeTask() {
+    public CompositeTask getCompositeTask()
+    {
         return compositeTask;
     }
 
-    public void setCompositeTask(CompositeTask compositeTask) {
+    public void setCompositeTask(CompositeTask compositeTask)
+    {
         this.compositeTask = compositeTask;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "CompositeTaskProxyCompositeKey{" +
                 "proxyCompositeTask=" + proxyCompositeTask +
                 ", compositeTask=" + compositeTask +
@@ -46,7 +53,8 @@ public class CompositeTaskProxyCompositeKey implements Serializable{
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -58,7 +66,8 @@ public class CompositeTaskProxyCompositeKey implements Serializable{
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = proxyCompositeTask != null ? proxyCompositeTask.hashCode() : 0;
         result = 31 * result + (compositeTask != null ? compositeTask.hashCode() : 0);
         return result;

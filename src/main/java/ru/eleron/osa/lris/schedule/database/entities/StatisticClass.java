@@ -12,7 +12,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "statistic_class")
-public class StatisticClass {
+public class StatisticClass
+{
 
     @EmbeddedId
     private CompositeTaskProxyCompositeKey compositeKey;
@@ -21,33 +22,40 @@ public class StatisticClass {
     private MarkForTask mark;
 
     public StatisticClass(){}
-    public StatisticClass(CompositeTaskProxyCompositeKey compositeKey, MarkForTask mark) {
+    public StatisticClass(CompositeTaskProxyCompositeKey compositeKey, MarkForTask mark)
+    {
         this.compositeKey = compositeKey;
         this.mark = mark;
     }
-    public StatisticClass(CompositeTask compositeTask, ProxyCompositeTask proxyCompositeTask, MarkForTask mark) {
+    public StatisticClass(CompositeTask compositeTask, ProxyCompositeTask proxyCompositeTask, MarkForTask mark)
+    {
         this.compositeKey = new CompositeTaskProxyCompositeKey(compositeTask, proxyCompositeTask);
         this.mark = mark;
     }
 
-    public CompositeTaskProxyCompositeKey getCompositeKey() {
+    public CompositeTaskProxyCompositeKey getCompositeKey()
+    {
         return compositeKey;
     }
 
-    public void setCompositeKey(CompositeTaskProxyCompositeKey compositeKey) {
+    public void setCompositeKey(CompositeTaskProxyCompositeKey compositeKey)
+    {
         this.compositeKey = compositeKey;
     }
 
-    public MarkForTask getMark() {
+    public MarkForTask getMark()
+    {
         return mark;
     }
 
-    public void setMark(MarkForTask mark) {
+    public void setMark(MarkForTask mark)
+    {
         this.mark = mark;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "StatisticClass{" +
                 "compositeKey=" + compositeKey +
                 ", mark=" + mark +
@@ -55,7 +63,8 @@ public class StatisticClass {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -66,7 +75,8 @@ public class StatisticClass {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = compositeKey != null ? compositeKey.hashCode() : 0;
         result = 31 * result + (mark != null ? mark.hashCode() : 0);
         return result;

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({JpaConfigurations.class})
 @ComponentScan(basePackages = {"ru.eleron.osa.lris.schedule"})
-public class SpringContextConfiguration {
+public class SpringContextConfiguration
+{
 
 }

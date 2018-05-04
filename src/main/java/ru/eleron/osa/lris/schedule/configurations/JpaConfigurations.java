@@ -31,13 +31,15 @@ import java.util.Properties;
 @PropertySource("classpath:db.properties")
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"ru.eleron.osa.lris.schedule"})
-public class JpaConfigurations {
+public class JpaConfigurations
+{
 
     @Autowired
     private Environment environment;
 
     @Bean(destroyMethod = "close")
-    public DataSource dataSource() {
+    public DataSource dataSource()
+    {
         HikariConfig dataSourceConfig = new HikariConfig();
         dataSourceConfig.setDriverClassName(environment.getProperty("jdbc.driverClassName"));
         dataSourceConfig.setJdbcUrl(environment.getProperty("jdbc.url"));
@@ -47,7 +49,8 @@ public class JpaConfigurations {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean sessionFactory() {
+    public LocalContainerEntityManagerFactoryBean sessionFactory()
+    {
         LocalContainerEntityManagerFactoryBean sessionFactory = new LocalContainerEntityManagerFactoryBean();
         sessionFactory.setDataSource(dataSource());
         sessionFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
@@ -63,7 +66,8 @@ public class JpaConfigurations {
 
     @Bean
     @Autowired
-    public PlatformTransactionManager transactionManager(EntityManagerFactory sessionFactory) {
+    public PlatformTransactionManager transactionManager(EntityManagerFactory sessionFactory)
+    {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(sessionFactory);
         return txManager;

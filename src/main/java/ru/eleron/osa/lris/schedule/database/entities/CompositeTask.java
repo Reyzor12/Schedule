@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "composite_task")
-public class CompositeTask extends EntityPrototype implements ClonnableObject<CompositeTask> {
+public class CompositeTask extends EntityPrototype implements ClonnableObject<CompositeTask>
+{
 
     public static final Integer DEFAULT_SCORE = 0;
     public static final Integer DEFAULT_TIME = 0;
@@ -27,16 +28,19 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
     @OneToMany
     private List<CompositeTask> children;
 
-    public CompositeTask() {
+    public CompositeTask()
+    {
         this.name = "";
         this.time = DEFAULT_TIME;
         this.score = DEFAULT_SCORE;
         children = new ArrayList<>();
     }
 
-    public CompositeTask(String name, List<CompositeTask> compositeTaskList) {
+    public CompositeTask(String name, List<CompositeTask> compositeTaskList)
+    {
         this.name = name;
-        if (compositeTaskList == null || compositeTaskList.isEmpty()) {
+        if (compositeTaskList == null || compositeTaskList.isEmpty())
+        {
             this.score = DEFAULT_SCORE;
             this.time = DEFAULT_TIME;
         } else {
@@ -45,7 +49,8 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
         }
     }
 
-    public CompositeTask(CompositeTask compositeTask) {
+    public CompositeTask(CompositeTask compositeTask)
+    {
         this.name = compositeTask.getName();
         this.score = compositeTask.getScore();
         this.time = compositeTask.getTime();
@@ -53,16 +58,20 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
         this.children = anotherChildren == null ? null : (anotherChildren.isEmpty() ? new ArrayList<>() : anotherChildren.stream().map(compositeTask1 -> compositeTask1.clone()).collect(Collectors.toList()));
     }
 
-    public boolean isTask() {
+    public boolean isTask()
+    {
         return children == null;
     }
 
-    public List<CompositeTask> getChildren() {
+    public List<CompositeTask> getChildren()
+    {
         return children;
     }
 
-    public void setChildren(List<CompositeTask> compositePatternForTaskList) {
-        if (!isTask()) {
+    public void setChildren(List<CompositeTask> compositePatternForTaskList)
+    {
+        if (!isTask())
+        {
             if (compositePatternForTaskList != null) {
                 this.children = compositePatternForTaskList;
                 this.score = compositePatternForTaskList.stream().mapToInt(CompositeTask::getScore).sum();
@@ -71,80 +80,100 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
         }
     }
 
-    public void addChildren(List<CompositeTask> compositePatternForTaskList) {
-        if (!isTask()) {
+    public void addChildren(List<CompositeTask> compositePatternForTaskList)
+    {
+        if (!isTask())
+        {
             if (compositePatternForTaskList != null) this.children.addAll(compositePatternForTaskList);
             this.score += compositePatternForTaskList.stream().mapToInt(CompositeTask::getScore).sum();
             this.time += compositePatternForTaskList.stream().mapToInt(CompositeTask::getTime).sum();
         }
     }
 
-    public void addChild(CompositeTask compositePatternForTask) {
-        if (!isTask()) {
+    public void addChild(CompositeTask compositePatternForTask)
+    {
+        if (!isTask())
+        {
             if (compositePatternForTask != null) this.children.add(compositePatternForTask);
             this.score += compositePatternForTask.getScore();
             this.time += compositePatternForTask.getTime();
         }
     }
 
-    public void removeChild(CompositeTask compositePatternForTask) {
-        if (!isTask()) {
+    public void removeChild(CompositeTask compositePatternForTask)
+    {
+        if (!isTask())
+        {
             if (compositePatternForTask != null) this.children.remove(compositePatternForTask);
             this.score -= compositePatternForTask.getScore();
             this.time -= compositePatternForTask.getTime();
         }
     }
 
-    public void removeChildren(List<CompositeTask> compositePatternForTaskList) {
-        if(!isTask()) {
+    public void removeChildren(List<CompositeTask> compositePatternForTaskList)
+    {
+        if(!isTask())
+        {
             if (compositePatternForTaskList != null) this.children.removeAll(compositePatternForTaskList);
             this.score -= compositePatternForTaskList.stream().mapToInt(CompositeTask::getScore).sum();
             this.time -= compositePatternForTaskList.stream().mapToInt(CompositeTask::getTime).sum();
         }
     }
 
-    public void removeAllChildren() {
-        if (isTask()) {
+    public void removeAllChildren()
+    {
+        if (isTask())
+        {
             this.children.clear();
             this.score = DEFAULT_SCORE;
             this.time = DEFAULT_TIME;
         }
     }
 
-    public boolean hasChildren() {
+    public boolean hasChildren()
+    {
         if (isTask()) return false;
         return !this.children.isEmpty();
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public Integer getScore() {
+    public Integer getScore()
+    {
         return score;
     }
 
-    public void setScore(Integer score) {
-        if (isTask()) {
+    public void setScore(Integer score)
+    {
+        if (isTask())
+        {
             this.score = score;
         }
     }
 
-    public Integer getTime() {
+    public Integer getTime()
+    {
         return time;
     }
 
-    public void setTime(Integer time) {
-        if (isTask()) {
+    public void setTime(Integer time)
+    {
+        if (isTask())
+        {
             this.time = time;
         }
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "CompositeTask{" +
                 "name='" + name + '\'' +
                 ", time=" + time +
@@ -153,7 +182,8 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CompositeTask that = (CompositeTask) o;
@@ -163,13 +193,15 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
 
         return Objects.hash(name, time, score);
     }
 
     @Override
-    public CompositeTask clone() {
+    public CompositeTask clone()
+    {
         return new CompositeTask(this);
     }
 }

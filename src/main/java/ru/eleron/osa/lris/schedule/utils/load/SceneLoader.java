@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsSittings;
 
@@ -20,7 +21,8 @@ import java.util.Map;
  * */
 
 @Component
-public class SceneLoader implements BaseSceneLoader {
+public class SceneLoader implements BaseSceneLoader
+{
 
     /**
      * Default sittings
@@ -37,11 +39,13 @@ public class SceneLoader implements BaseSceneLoader {
 
     private final static Logger logger = LogManager.getLogger(SceneLoader.class);
 
-    private static final SpringFxmlLoader springFxmlLoader = new SpringFxmlLoader();
+    @Autowired
+    private SpringFxmlLoader springFxmlLoader;
 
     private Map<String, Stage> sceneCache;
 
-    public SceneLoader() {
+    public SceneLoader()
+    {
         sceneCache = new HashMap<>();
     }
 
@@ -50,7 +54,8 @@ public class SceneLoader implements BaseSceneLoader {
      * */
 
     @Override
-    public void loadScene(String url, Integer width, Integer height) {
+    public void loadScene(String url, Integer width, Integer height)
+    {
         Stage stage = sceneCache.get(url);
         if (stage == null) {
             logger.info("load scene absent in cache " + url);
@@ -60,7 +65,8 @@ public class SceneLoader implements BaseSceneLoader {
             sceneCache.put(url, stage);
             stage.show();
         } else {
-            if (!stage.isShowing()) {
+            if (!stage.isShowing())
+            {
                 logger.info("load scene from cache " + url);
                 stage.show();
             }
@@ -68,15 +74,18 @@ public class SceneLoader implements BaseSceneLoader {
     }
 
     @Override
-    public void loadScene(String url) {
+    public void loadScene(String url)
+    {
         Stage stage = sceneCache.get(url);
-        if (stage == null) {
+        if (stage == null)
+        {
             logger.info("load scene absent in cache " + url);
             stage = getNewDefaultStage(url);
             sceneCache.put(url, stage);
             stage.show();
         } else {
-            if (!stage.isShowing()) {
+            if (!stage.isShowing())
+            {
                 logger.info("load scene from cache " + url);
                 stage.show();
             }
@@ -84,18 +93,30 @@ public class SceneLoader implements BaseSceneLoader {
     }
 
     @Override
-    public void loadScene(String url, Integer minWidth, Integer minHeight, Integer maxWidth, Integer maxHeight, Integer width, Integer height) {
+    public void loadScene(String url, Integer minWidth, Integer minHeight, Integer maxWidth, Integer maxHeight, Integer width, Integer height)
+    {
         Stage stage = sceneCache.get(url);
-        if (stage == null) {
+        if (stage == null)
+        {
             logger.info("load scene absent in cache " + url);
             stage = getNewStage(url, minWidth, minHeight, maxWidth, maxHeight, width, height);
             sceneCache.put(url, stage);
             stage.show();
         } else {
-            if (!stage.isShowing()) {
+            if (!stage.isShowing())
+            {
                 logger.info("load scene from cache " + url);
                 stage.show();
             }
+        }
+    }
+
+    @Override
+    public void loadScene(String url, Stage stage) {
+        if (stage != null && url != null)
+        {
+            sceneCache.put(url, stage);
+            loadScene(url);
         }
     }
 
@@ -103,7 +124,8 @@ public class SceneLoader implements BaseSceneLoader {
      * utilities
      * */
 
-    private void initDefaultStage(Stage stage) {
+    private void initDefaultStage(Stage stage)
+    {
         stage.setHeight(DEFAULT_HEIGHT);
         stage.setWidth(DEFAULT_WIDTH);
         stage.setMinHeight(MIN_HEIGHT);
@@ -115,7 +137,8 @@ public class SceneLoader implements BaseSceneLoader {
         stage.getIcons().add(new Image(getClass().getResourceAsStream(ICON_PATH)));
     }
 
-    private void initStage(Stage stage, Integer minWidth, Integer minHeight, Integer maxWidth, Integer maxHeight, Integer width, Integer height) {
+    private void initStage(Stage stage, Integer minWidth, Integer minHeight, Integer maxWidth, Integer maxHeight, Integer width, Integer height)
+    {
         stage.setHeight(height);
         stage.setWidth(width);
         stage.setMinHeight(minHeight);
@@ -127,19 +150,22 @@ public class SceneLoader implements BaseSceneLoader {
         stage.getIcons().add(new Image(getClass().getResourceAsStream(ICON_PATH)));
     }
 
-    private Stage getNewDefaultStage(String url) {
+    private Stage getNewDefaultStage(String url)
+    {
         final Stage stage = createStageWithoutSittings(url);
         initDefaultStage(stage);
         return stage;
     }
 
-    private Stage getNewStage(String url, Integer minWidth, Integer minHeight, Integer maxWidth, Integer maxHeight, Integer width, Integer height) {
+    private Stage getNewStage(String url, Integer minWidth, Integer minHeight, Integer maxWidth, Integer maxHeight, Integer width, Integer height)
+    {
         final Stage stage = createStageWithoutSittings(url);
         initStage(stage, minWidth, minHeight, maxWidth, maxHeight, width, height);
         return stage;
     }
 
-    private Stage createStageWithoutSittings(String url) {
+    private Stage createStageWithoutSittings(String url)
+    {
         Parent root = (Parent) springFxmlLoader.load(url);
         Scene scene = new Scene(root);
         Stage stage = new Stage();

@@ -9,30 +9,39 @@ import ru.eleron.osa.lris.schedule.configurations.SpringContextConfiguration;
 import ru.eleron.osa.lris.schedule.utils.load.BaseSceneLoader;
 import ru.eleron.osa.lris.schedule.utils.load.SceneLoader;
 
-public class MainApp extends Application  {
+public class MainApp extends Application
+{
 
     private final static Logger logger = LogManager.getLogger(MainApp.class);
     public final static AnnotationConfigApplicationContext APPLICATION_CONTEXT = new AnnotationConfigApplicationContext(SpringContextConfiguration.class);
 
     private BaseSceneLoader sceneLoader;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         Application.launch(args);
     }
 
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws Exception
+    {
         initApp();
     }
 
-    public void initApp() {
+    public void initApp()
+    {
         logger.info("spring context init");
         initMainWindow();
         logger.info("init main window");
     }
 
-    public void initMainWindow() {
+    public void initMainWindow()
+    {
         sceneLoader = (SceneLoader)APPLICATION_CONTEXT.getBean("sceneLoader");
         sceneLoader.loadScene("frame/MainMenu.fxml");
     }
 
+    public void stop()
+    {
+        APPLICATION_CONTEXT.stop();
+    }
 }

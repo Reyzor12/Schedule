@@ -10,7 +10,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "proxy_composite_task")
-public class ProxyCompositeTask extends EntityPrototype {
+public class ProxyCompositeTask extends EntityPrototype
+{
 
     @Column(name = "name")
     private String name;
@@ -22,46 +23,56 @@ public class ProxyCompositeTask extends EntityPrototype {
     private CompositeTask compositeTask;
 
     public ProxyCompositeTask() {}
-    public ProxyCompositeTask(Date date, CompositeTask compositeTask, String name) {
+    public ProxyCompositeTask(Date date, CompositeTask compositeTask, String name)
+    {
         this.date = date;
         this.compositeTask = compositeTask;
         this.name = name;
     }
 
-    public List<String> generateStatistic(CompositeTask composite) {
+    public List<String> generateStatistic(CompositeTask composite)
+    {
         if (compositeTask == null || compositeTask.getChildren() == null || compositeTask.getChildren().isEmpty() ) return  new ArrayList<>();
         return composite.getChildren().stream().map(compositeStream -> compositeStream.getName() + "=0").collect(Collectors.toList());
     }
 
-    public LocalDateTime getDate() {
+    public LocalDateTime getDate()
+    {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    public void setDate(LocalDateTime localDateTime) {
+    public void setDate(LocalDateTime localDateTime)
+    {
         this.date = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    public void setDate(Date date) {
+    public void setDate(Date date)
+    {
         this.date = date;
     }
 
-    public void setCompositeTask(CompositeTask compositeTask) {
+    public void setCompositeTask(CompositeTask compositeTask)
+    {
         this.compositeTask = compositeTask;
     }
-    public CompositeTask getCompositeTask() {
+    public CompositeTask getCompositeTask()
+    {
         return compositeTask;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "ProxyCompositeTask{" +
                 "date=" + date +
                 ", compositeTask=" + compositeTask.getName() +
@@ -70,7 +81,8 @@ public class ProxyCompositeTask extends EntityPrototype {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
@@ -82,7 +94,8 @@ public class ProxyCompositeTask extends EntityPrototype {
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (compositeTask != null ? compositeTask.hashCode() : 0);

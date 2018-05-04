@@ -7,7 +7,8 @@ package ru.eleron.osa.lris.schedule.utils.storage;
  * @since 04.05.2018
  */
 
-public enum ConstantsSittings {
+public enum ConstantsSittings
+{
     /**
      * Application common sittings
      * */
