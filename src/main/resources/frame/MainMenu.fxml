@@ -11,7 +11,7 @@
       <AnchorPane id="pane" layoutX="14.0" layoutY="99.0" maxHeight="940.0" maxWidth="1610.0" minHeight="610.0" minWidth="714.0" prefHeight="610.0" prefWidth="714.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="100.0">
          <children>
             <Label id="label-text-2" alignment="CENTER" layoutX="20.0" layoutY="50.0" prefHeight="44.0" prefWidth="694.0" text="Расписание занятий на сегодня" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0" />
-            <TableView fx:id="taskTableView" id="table-view-1" layoutX="38.0" layoutY="125.0" prefHeight="441.0" prefWidth="642.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
+            <TableView id="table-view-1" fx:id="taskTableView" layoutX="38.0" layoutY="125.0" prefHeight="441.0" prefWidth="642.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
               <columns>
                 <TableColumn fx:id="taskNameColumn" prefWidth="75.0" sortable="false" text="Занятие" />
                 <TableColumn fx:id="taskStartColumn" prefWidth="75.0" sortable="false" text="Начало" />
@@ -30,7 +30,9 @@
       </AnchorPane>
       <AnchorPane id="pane" layoutX="732.0" layoutY="100.0" maxHeight="940.0" maxWidth="282.0" minHeight="610.0" minWidth="282.0" prefHeight="610.0" prefWidth="282.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
          <children>
-            <Button id="button-1" alignment="CENTER" layoutX="31.0" layoutY="44.0" mnemonicParsing="false" text="Button" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="50.0" />
+            <Button id="button-1" alignment="CENTER" layoutX="31.0" layoutY="44.0" mnemonicParsing="false" text="Выбрать" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="100.0" />
+            <Button id="button-1" alignment="CENTER" layoutX="115.0" layoutY="182.0" mnemonicParsing="false" text="Составить" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="200.0" />
+            <Label id="label-text-3" alignment="CENTER" layoutX="127.0" layoutY="50.0" prefHeight="44.0" text="Label" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="20.0" />
          </children></AnchorPane>
    </children>
 </AnchorPane>

@@ -25,6 +25,15 @@
     -fx-alignment: center;
 }
 
+#label-text-3 {
+    -fx-background-color: transparent;
+    -fx-font: 20pt "Courier New";
+    -fx-text-fill: #00E020;
+    -fx-alignment: center;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-color: #00E020;
+}
+
 #table-view-1 {
     -fx-border-style: dashed;
     -fx-border-color: #00E020;
