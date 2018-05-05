@@ -1,18 +1,19 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
+import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
+import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
+import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.BaseSceneLoader;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
-import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
 
 /**
  * Class controller for main menu of application
@@ -22,19 +23,10 @@ import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
  * */
 
 @Component
-public class MainMenuController
+public class MainMenuController implements FrameControllerBaseIF
 {
+    private static final Logger logger = LogManager.getLogger(MainMenuController.class);
 
-    @FXML
-    private TableView<ProxyCompositeTask> taskTableView;
-    @FXML
-    private TableColumn<ProxyCompositeTask, String> taskNameColumn;
-    @FXML
-    private TableColumn<ProxyCompositeTask, String> taskStartColumn;
-    @FXML
-    private TableColumn<ProxyCompositeTask, String> taskEndColumn;
-    @FXML
-    private TableColumn<ProxyCompositeTask, String> taskMarkColumn;
     @FXML
     private AnchorPane informationAnchorPane;
 
@@ -42,34 +34,36 @@ public class MainMenuController
     private BaseSceneLoader sceneLoader;
     @Autowired
     private SpringFxmlLoader springFxmlLoader;
+    @Autowired
+    private FadeNodeControl fadeNodeControl;
 
     public void initialize()
     {
         initData();
         configureElements();
         enableTooltips();
-        System.out.println("it's my life");
+        logger.info("Controller " + getClass().getSimpleName() + " loaded");
     }
 
-    private void configureElements()
+    public void configureElements()
     {
-        taskTableView.setPlaceholder(new Label(ConstantsForElements.EMPTY_CURRENT_TASK_TABLE.getMessage()));
-    }
-
-    private void initData()
-    {
-
-    }
-
-    private void enableTooltips()
-    {
-
-    }
-
-    public void onClick()
-    {
-        //sceneLoader.loadScene("frame/MainMenu.fxml", 900, 1000);
         informationAnchorPane.getChildren().clear();
-        informationAnchorPane.getChildren().add((Node) springFxmlLoader.load("frame/hello.fxml"));
+        informationAnchorPane.getChildren().add((Parent) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
+    }
+
+    public void initData()
+    {
+
+    }
+
+    public void enableTooltips()
+    {
+
+    }
+
+    public void onClick(ActionEvent event)
+    {
+        logger.info("Button " + event.getSource().getClass().getSimpleName() + " is clicked");
+        fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load("frame/Test.fxml"));
     }
 }

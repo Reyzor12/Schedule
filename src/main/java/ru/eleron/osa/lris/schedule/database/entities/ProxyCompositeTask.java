@@ -8,6 +8,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Entity like a task (concrete object). Main object of application
+ * @author Reyzor
+ * @version 1.0
+ * @since 05.05.2018
+ * */
+
 @Entity
 @Table(name = "proxy_composite_task")
 public class ProxyCompositeTask extends EntityPrototype

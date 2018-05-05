@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.eleron.osa.lris.schedule.configurations.SpringContextConfiguration;
+import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.BaseSceneLoader;
 import ru.eleron.osa.lris.schedule.utils.load.SceneLoader;
 
@@ -37,7 +38,7 @@ public class MainApp extends Application
     public void initMainWindow()
     {
         sceneLoader = (SceneLoader)APPLICATION_CONTEXT.getBean("sceneLoader");
-        sceneLoader.loadScene("frame/MainMenu.fxml");
+        sceneLoader.loadScene(ScenesInApplication.MAIN_MENU.getUrl());
     }
 
     public void stop()
