@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.utils.aop.Logging;
 
 /**
  * Class for fade in application
@@ -24,11 +25,13 @@ public class FadeNodeControl
         fadeTransition = new FadeTransition();
     }
 
+    @Logging
     public void changeSceneWithFade(Pane container, Node filler)
     {
         changeSceneWithFade(container, filler, DEFAULT_DURATION);
     }
 
+    @Logging
     public void changeSceneWithFade(Pane container, Node filler, Integer duration)
     {
         if (container != null && filler != null && duration != null && duration > 0)
@@ -50,6 +53,12 @@ public class FadeNodeControl
         container.getChildren().clear();
         container.getChildren().add(filler);
         fadeTransition.play();
+    }
+
+    @Logging
+    public void loadSceneInPane(Pane pane, Node node) {
+        pane.getChildren().clear();
+        pane.getChildren().add(node);
     }
 
 }

@@ -15,26 +15,18 @@ public class LoggerAspect {
 
     private final static Logger logger = LogManager.getLogger();
 
-   /* @Around("loggingForAnnotationLogging()")
+    @Around("loggingForAnnotationLogging()")
     public void loggingAnnotationLogging(ProceedingJoinPoint point)
     {
         try {
-            logger.info("method start: " + point.getKind());
+            logger.info("method start: " + point.getSignature() + " in class " + point.getTarget());
             point.proceed();
-            logger.info("method end: " + point.getKind());
+            logger.info("method end: " + point.getSignature());
         } catch (Throwable throwable) {
-            logger.error("method error: " + point.getKind(), throwable);
+            logger.error("method error: " + point.getSignature(), throwable);
         }
-
-    }*/
-
-    @Before("execution(* onClick(..))")
-    public void hello() {
-        System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDdd");
     }
 
-   /* @Pointcut("@annotation(ru.eleron.osa.lris.schedule.utils.aop.Logging)")
-    public void loggingForAnnotationLogging(){}*/
-    /*@Pointcut("execution(* onClick(..))")
-    public void test(){}*/
+    @Pointcut("@annotation(ru.eleron.osa.lris.schedule.utils.aop.Logging)")
+    public void loggingForAnnotationLogging(){}
 }

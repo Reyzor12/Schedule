@@ -44,13 +44,14 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
 
     @Override
     public void initData() {
-
+        logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
     @Override
     public void configureElements()
     {
         taskTableView.setPlaceholder(new Label(ConstantsForElements.EMPTY_CURRENT_TASK_TABLE.getMessage()));
+        logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
 
     @Override

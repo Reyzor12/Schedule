@@ -8,9 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-import ru.eleron.osa.lris.schedule.utils.aop.Logging;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
@@ -39,7 +37,6 @@ public class MainMenuController implements FrameControllerBaseIF
     @Autowired
     private FadeNodeControl fadeNodeControl;
 
-    //@Logging
     public void initialize()
     {
         initData();
@@ -50,13 +47,13 @@ public class MainMenuController implements FrameControllerBaseIF
 
     public void configureElements()
     {
-        informationAnchorPane.getChildren().clear();
-        informationAnchorPane.getChildren().add((Parent) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
+        fadeNodeControl.loadSceneInPane(informationAnchorPane, (Parent) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
+        logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
 
     public void initData()
     {
-
+        logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
     public void enableTooltips()
@@ -67,6 +64,6 @@ public class MainMenuController implements FrameControllerBaseIF
     public void onClick(ActionEvent event)
     {
         logger.info("Button " + event.getSource().getClass().getSimpleName() + " is clicked");
-        fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load("frame/Test.fxml"));
+        fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load("frame/ChoosePlanForDay.fxml"));
     }
 }
