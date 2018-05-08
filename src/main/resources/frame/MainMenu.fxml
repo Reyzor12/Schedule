@@ -3,22 +3,24 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1024.0" styleClass="pane-main" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.MainMenuController">
+<AnchorPane prefHeight="720.0" prefWidth="1024.0" styleClass="pane-main" stylesheets="@../css/application.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.MainMenuController">
    <children>
       <AnchorPane fx:id="informationAnchorPane" layoutX="14.0" layoutY="99.0" maxHeight="940.0" maxWidth="1610.0" minHeight="610.0" minWidth="714.0" prefHeight="610.0" prefWidth="714.0" styleClass="pane" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="300.0" AnchorPane.topAnchor="100.0">
          </AnchorPane>
       <AnchorPane maxHeight="120.0" maxWidth="1920.0" minHeight="78.0" minWidth="1004.0" prefHeight="78.0" prefWidth="1004.0" styleClass="pane" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
-            <Label layoutX="74.0" layoutY="19.0" prefHeight="11.0" prefWidth="254.0" styleClass="label-text-1" text="Планировщик @" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Label layoutX="74.0" layoutY="19.0" prefHeight="11.0" prefWidth="254.0" text="Планировщик @" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <styleClass>
+                  <String fx:value="label-text-1" />
+                  <String fx:value="default-label-text-1" />
+               </styleClass></Label>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="732.0" layoutY="100.0" maxHeight="940.0" maxWidth="282.0" minHeight="610.0" minWidth="282.0" prefHeight="610.0" prefWidth="282.0" styleClass="pane" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
          <children>
-            <Button onAction="#onClick" alignment="CENTER" layoutX="31.0" layoutY="44.0" mnemonicParsing="false" text="Выбрать" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="100.0">
+            <Button alignment="CENTER" layoutX="31.0" layoutY="44.0" mnemonicParsing="false" onAction="#onClick" text="Выбрать" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="100.0">
                <styleClass>
                   <String fx:value="button-1" />
                   <String fx:value="button-default-1" />
@@ -34,7 +36,17 @@
                   <String fx:value="button-2" />
                </styleClass>
             </Button>
-            <Label alignment="CENTER" layoutX="127.0" layoutY="50.0" prefHeight="44.0" styleClass="label-text-3" text="Меню" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="20.0" />
+            <Label alignment="CENTER" layoutX="127.0" layoutY="50.0" prefHeight="44.0" text="Меню" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="20.0">
+               <styleClass>
+                  <String fx:value="label-text-3" />
+                  <String fx:value="default-label-text-1" />
+               </styleClass></Label>
+            <Button alignment="CENTER" layoutX="115.0" layoutY="430.0" mnemonicParsing="false" prefHeight="56.0" text="План" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="400.0">
+               <styleClass>
+                  <String fx:value="button-default-1" />
+                  <String fx:value="button-1" />
+               </styleClass>
+            </Button>
          </children></AnchorPane>
    </children>
 </AnchorPane>

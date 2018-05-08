@@ -1,8 +1,10 @@
-.pane-main {
+.pane-main
+{
     -fx-background-color: black;
 }
 
-.pane {
+.pane
+{
     -fx-border-width: 10px;
     -fx-border-color: #306030;
     -fx-border-radius: 7px;
@@ -11,31 +13,45 @@
     -fx-font: 16pt "Courier New";
 }
 
-.label-text-1 {
+.pane-without-border-1
+{
+    -fx-background-color: #304030;
+    -fx-font: 16pt "Courier New";
+}
+
+.default-label-text-1
+{
     -fx-background-color: transparent;
-    -fx-font: 24pt "Courier New";
     -fx-text-fill: #00E020;
     -fx-alignment: center;
 }
 
-.label-text-2 {
-    -fx-background-color: transparent;
+.label-text-1
+{
+    -fx-font: 24pt "Courier New";
+}
+
+.label-text-2
+{
     -fx-font: 20pt "Courier New";
-    -fx-text-fill: #00E020;
-    -fx-alignment: center;
 }
 
-.label-text-3 {
-    -fx-background-color: transparent;
+.label-text-3
+{
     -fx-font: 24pt "Courier New";
-    -fx-text-fill: #00E020;
     -fx-font-weight: bold;
-    -fx-alignment: center;
     -fx-border-width: 0 0 2 0;
     -fx-border-color: #00E020;
 }
 
-.table-view-1 {
+.label-text-4
+{
+    -fx-font: 16pt "Courier New";
+    -fx-alignment: center-left;
+}
+
+.table-view-1
+{
     -fx-border-style: dashed;
     -fx-border-color: #00E020;
     -fx-border-width: 3px;
@@ -45,27 +61,32 @@
     -fx-border-radius: 7px;
 }
 
-.table-view-1 .column-header-background, {
+.table-view-1 .column-header-background,
+{
     -fx-background-color: transparent;
 }
 
-.table-view-1 .column-header .label {
+.table-view-1 .column-header .label
+{
     -fx-text-fill: #00E020;
 }
 
-.table-view-1 .column-header {
+.table-view-1 .column-header
+{
     -fx-border-style: dashed;
     -fx-border-color: #00E020;
     -fx-border-width: 0 3 3 0;
     -fx-border-insets: 0 -3 0 0;
 }
 
-.table-view-1 .placeholder .label {
+.table-view-1 .placeholder .label
+{
     -fx-font: 14pt "Courier New";
     -fx-text-fill: #00E020;
 }
 
-.button-default-1 {
+.button-default-1
+{
     -fx-border-color: #00E020;
     -fx-border-width: 3px;
     -fx-border-radius: 6px;
@@ -73,21 +94,40 @@
     -fx-text-fill: #00E020;
 }
 
-.button-1 {
+.button-1
+{
     -fx-font: 20pt "Courier New";
     -fx-font-weight: bold;
 }
 
-.button-2 {
+.button-2
+{
     -fx-font: 18pt "Courier New";
     -fx-font-weight: bold;
 }
 
-.button-default-1:pressed {
+.button-default-1:pressed
+{
     -fx-border-color: black;
 }
 
-.button-default-1:hover {
+.button-default-1:hover
+{
     -fx-background-color: #00E020;
     -fx-text-fill: black;
+}
+
+.button-default-2
+{
+}
+.button-default-2:hover
+{
+    -fx-border-color: #00E020;
+    -fx-border-width: 3px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 7px;
+}
+.button-default-2:pressed
+{
+    -fx-border-color: black;
 }

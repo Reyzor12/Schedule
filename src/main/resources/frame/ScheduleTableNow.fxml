@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.eleron.osa.lris.schedule.controllers.ScheduleTableNowController"
-            prefHeight="400.0" prefWidth="600.0"
-            AnchorPane.bottomAnchor="0.0"
-            AnchorPane.leftAnchor="0.0"
-            AnchorPane.rightAnchor="0.0"
-            AnchorPane.topAnchor="0.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.ScheduleTableNowController">
     <children>
-        <Label alignment="CENTER" layoutX="20.0" layoutY="50.0" prefHeight="44.0" prefWidth="694.0" styleClass="label-text-2" text="Расписание занятий на сегодня" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0" />
+        <Label alignment="CENTER" layoutX="20.0" layoutY="50.0" prefHeight="44.0" prefWidth="694.0" text="Расписание занятий на сегодня" textAlignment="CENTER" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
+         <styleClass>
+            <String fx:value="label-text-2" />
+            <String fx:value="default-label-text-1" />
+         </styleClass></Label>
         <TableView fx:id="taskTableView" layoutX="38.0" layoutY="125.0" prefHeight="441.0" prefWidth="642.0" styleClass="table-view-1" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="70.0">
             <columns>
                 <TableColumn fx:id="taskNameColumn" prefWidth="75.0" sortable="false" text="Занятие" />

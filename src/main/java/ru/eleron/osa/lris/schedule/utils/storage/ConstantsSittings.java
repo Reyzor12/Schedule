@@ -1,5 +1,8 @@
 package ru.eleron.osa.lris.schedule.utils.storage;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Class is bundle for common constants of application and common sittings
  * @author reyzor
@@ -22,20 +25,30 @@ public enum ConstantsSittings
     APPLICATION_MAIN_WINDOW_MAX_WIDTH(1920),
     APPLICATION_MAIN_WINDOW_MAX_HEIGHT(1080),
     APPLICATION_MAIN_WINDOW_DEFAULT_WIDTH(1024),
-    APPLICATION_MAIN_WINDOW_DEFAULT_HEIGHT(720);
+    APPLICATION_MAIN_WINDOW_DEFAULT_HEIGHT(720),
+
+    /**
+     * Initial time for tasks
+     * */
+
+    APPLICATION_INITIAL_TASK_TIME_DEFAULT(8.30d),
+    APPLICATION_INITIAL_TASK_TIME(Arrays.asList(8.30d, 9d));
 
     private String stringConstant;
     private Integer integerConstant;
+    private Double doubleConstant;
+    private List<Double> doubleListConstant;
 
     ConstantsSittings(String stringConstant)
     {
         this.stringConstant = stringConstant;
     }
-
     ConstantsSittings(Integer integerConstant)
     {
         this.integerConstant = integerConstant;
     }
+    ConstantsSittings(Double doubleConstant) {this.doubleConstant = doubleConstant;}
+    ConstantsSittings(List<Double> doubleListConstant) {this.doubleListConstant = doubleListConstant;}
 
     public String getStringConstant()
     {
@@ -45,5 +58,15 @@ public enum ConstantsSittings
     public Integer getIntegerConstant()
     {
         return integerConstant;
+    }
+
+    public Double getDoubleContant()
+    {
+        return doubleConstant;
+    }
+
+    public List<Double> getDoubleListConstant()
+    {
+        return doubleListConstant;
     }
 }
