@@ -39,6 +39,18 @@ public class SpinnerForSchedule implements SpinnerForScheduleIF<Image> {
         this.currentValue = this.defaultValue;
     }
 
+    public SpinnerForSchedule(Collection<Double> items)
+    {
+        this.items = new ArrayList<>(items);
+        if (NUMBER_HASH.isEmpty()) loadDataToMap();
+        if(this.items.isEmpty()) {
+            this.defaultValue = 0d;
+        } else {
+            this.defaultValue = this.items.get(0);
+        }
+        this.currentValue = this.defaultValue;
+    }
+
     @Override
     public List<Image> next()
     {
