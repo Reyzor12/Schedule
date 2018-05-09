@@ -1,14 +1,24 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
-import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
-import ru.eleron.osa.lris.schedule.utils.storage.ConstantsSittings;
+import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
+import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForSchedule;
+import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForScheduleIF;
+
+import java.util.Arrays;
+import java.util.List;
+
 
 @Component
 public class ChoosePlanForDayController implements FrameControllerBaseIF{
@@ -16,11 +26,29 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
     private final static Logger logger = LogManager.getLogger(ChoosePlanForDayController.class);
 
     @FXML
-    private Spinner<Integer> spinnerStartWork;
+    private ImageView hourPositionSecondImageView;
+    @FXML
+    private ImageView minutePositionFirstImageView;
+    @FXML
+    private ImageView minutePositionSecondImageView;
+    @FXML
+    private ImageView deviderImageView;
+    @FXML
+    private Button increaseButton;
+    @FXML
+    private Button decreaseButton;
+    @FXML
+    private Button chooseTaskButton;
+    @FXML
+    private ListView templatesListView;
+
+    private SpinnerForScheduleIF<Image> spinner;
 
     public void initialize()
     {
-        System.out.println("URS");
+        initData();
+        configureElements();
+        enableTooltips();
         logger.info("Controller " + getClass().getSimpleName() + " loaded");
     }
 
@@ -31,20 +59,47 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
 
     @Override
     public void configureElements() {
-        /*spinnerStartWork.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_VERTICAL);
-        final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.ListSpinnerValueFactory(
-                                                                        FXCollections.observableArrayList(
-                                                                                ConstantsSittings.APPLICATION_INITIAL_TASK_TIME.getDoubleListConstant()
-                                                                        )
-                                                                );
-        spinnerValueFactory.setValue(ConstantsSittings.APPLICATION_INITIAL_TASK_TIME_DEFAULT.getDoubleContant());
-        spinnerStartWork.setValueFactory(spinnerValueFactory);*/
-        spinnerStartWork.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,100,1));
+        templatesListView.setPlaceholder(new Label(ConstantsForElements.EMPTY_CURRENT_TASK_TABLE.getMessage()));
+        spinner = new SpinnerForSchedule(8.00d, Arrays.asList(8.00d,8.30d, 9.00d));
+        deviderImageView.setImage(new Image(getClass().getClassLoader().getResource(ConstantsForElements.DEVISION.getMessage()).toString()));
+        setSpinnerTime(spinner.getCurrentValue());
+        decreaseButton.setDisable(true);
         logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
 
     @Override
     public void enableTooltips() {
+        increaseButton.setTooltip(new Tooltip("Увеличить время"));
+        decreaseButton.setTooltip(new Tooltip("Уменьшить время"));
+        chooseTaskButton.setTooltip(new Tooltip("Выбрать шаблон"));
+        templatesListView.setTooltip(new Tooltip("Шаблоны распорядка дня"));
+    }
 
+    /**
+     * change image on spinner
+     * */
+
+    private void setSpinnerTime(List<Image> spinnerTime)
+    {
+        hourPositionSecondImageView.setImage(spinnerTime.get(0));
+        minutePositionFirstImageView.setImage(spinnerTime.get(1));
+        minutePositionSecondImageView.setImage(SpinnerForSchedule.NUMBER_HASH.get(0));
+    }
+
+    public void increaseButtonClicked(ActionEvent event)
+    {
+        if (decreaseButton.isDisable()) decreaseButton.setDisable(false);
+        setSpinnerTime(spinner.next());
+        if (!spinner.hasNext()) ((Button)event.getSource()).setDisable(true);
+    }
+    public void decreaseButtonClicked(ActionEvent event)
+    {
+        if (increaseButton.isDisable()) increaseButton.setDisable(false);
+        setSpinnerTime(spinner.previous());
+        if (!spinner.hasPrevious()) ((Button)event.getSource()).setDisable(true);
+    }
+    public void chooseTaskButtonClicked()
+    {
+        System.out.println("chooseTaskButtonClicked");
     }
 }

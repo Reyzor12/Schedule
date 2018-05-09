@@ -8,46 +8,49 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.ChoosePlanForDayController">
+<AnchorPane prefHeight="720.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.ChoosePlanForDayController">
    <children>
-      <ListView layoutX="37.0" layoutY="79.0" prefHeight="249.0" prefWidth="537.0" styleClass="table-view-1" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="70.0" />
+      <ListView fx:id="templatesListView" layoutX="37.0" layoutY="79.0" prefHeight="249.0" prefWidth="537.0" styleClass="table-view-1" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="70.0" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="188.0" layoutY="33.0" prefHeight="24.0" prefWidth="265.0" text="Шаблоны занятий на день" textAlignment="CENTER" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <styleClass>
             <String fx:value="label-text-1" />
             <String fx:value="default-label-text-1" />
          </styleClass></Label>
-      <Label layoutX="40.0" layoutY="656.0" prefWidth="300.0" text="Время начала" textAlignment="CENTER" AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="40.0">
+      <Label layoutX="40.0" layoutY="656.0" prefHeight="16.0" prefWidth="167.0" text="Начало" textAlignment="CENTER" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0">
          <styleClass>
             <String fx:value="label-text-4" />
             <String fx:value="default-label-text-1" />
          </styleClass></Label>
-      <Button layoutX="876.0" layoutY="668.0" mnemonicParsing="false" prefWidth="180.0" text="Выбрать" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="40.0">
+      <Button fx:id="chooseTaskButton" onAction="#chooseTaskButtonClicked" layoutX="876.0" layoutY="668.0" mnemonicParsing="false" prefWidth="180.0" text="Выбрать" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="40.0">
          <styleClass>
             <String fx:value="button-default-1" />
             <String fx:value="button-1" />
          </styleClass>
       </Button>
-      <AnchorPane layoutX="190.0" layoutY="639.0" prefHeight="96.0" prefWidth="228.0" styleClass="pane-without-border-1" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0">
+      <AnchorPane layoutX="123.0" layoutY="600.0" prefHeight="83.0" prefWidth="328.0" styleClass="pane-without-border-1" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="123.0">
          <children>
-            <Button layoutX="23.0" layoutY="23.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" styleClass="button-default-2" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0">
+            <Button fx:id="decreaseButton" onAction="#decreaseButtonClicked" layoutX="23.0" layoutY="23.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="51.0" styleClass="button-default-2" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="5.0">
                <graphic>
-                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="48.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/icons/down.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button layoutX="209.0" layoutY="46.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="35.0" styleClass="button-default-2" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="10.0">
+            <Button fx:id="increaseButton" onAction="#increaseButtonClicked" layoutX="242.0" layoutY="5.0" mnemonicParsing="false" prefHeight="63.0" prefWidth="51.0" styleClass="button-default-2" AnchorPane.bottomAnchor="15.0" AnchorPane.topAnchor="5.0">
                <graphic>
-                  <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="48.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/icons/up.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <ImageView fitHeight="62.0" fitWidth="109.0" layoutX="103.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" />
+            <ImageView fx:id="hourPositionSecondImageView" fitHeight="62.0" fitWidth="36.0" layoutX="84.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="84.0" />
+            <ImageView fx:id="minutePositionFirstImageView" fitHeight="62.0" fitWidth="36.0" layoutX="164.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="164.0" />
+            <ImageView fx:id="minutePositionSecondImageView" fitHeight="62.0" fitWidth="36.0" layoutX="200.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="200.0" />
+            <ImageView fx:id="deviderImageView" fitHeight="62.0" fitWidth="36.0" layoutX="128.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="11.0" />
          </children>
       </AnchorPane>
    </children>

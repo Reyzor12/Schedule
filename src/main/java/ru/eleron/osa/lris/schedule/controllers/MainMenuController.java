@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,6 +31,14 @@ public class MainMenuController implements FrameControllerBaseIF
 
     @FXML
     private AnchorPane informationAnchorPane;
+    @FXML
+    private Button chooseButton;
+    @FXML
+    private Button createButton;
+    @FXML
+    private Button statisticsButton;
+    @FXML
+    private Button planButton;
 
     @Autowired
     private BaseSceneLoader sceneLoader;
@@ -58,12 +68,28 @@ public class MainMenuController implements FrameControllerBaseIF
 
     public void enableTooltips()
     {
-
+        chooseButton.setTooltip(new Tooltip("Выбрать план на день"));
+        createButton.setTooltip(new Tooltip("Составить план на день"));
+        statisticsButton.setTooltip(new Tooltip("Посмотреть статистику"));
+        planButton.setTooltip(new Tooltip("Показать план на день"));
     }
 
-    public void onClick(ActionEvent event)
+    public void chooseButtonClicked(ActionEvent event)
     {
-        logger.info("Button " + event.getSource().getClass().getSimpleName() + " is clicked");
-        fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load("frame/ChoosePlanForDay.fxml"));
+        logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load(ScenesInApplication.CHOOSE_PLAN_FOR_DAY.getUrl()));
+    }
+    public void createButtonClicked(ActionEvent event)
+    {
+        System.out.println("create button clicked");
+    }
+    public void statisticsButtonClicked(ActionEvent event)
+    {
+        System.out.println("statistics button clicked");
+    }
+    public void planButtonClicked(ActionEvent event)
+    {
+        logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
     }
 }

@@ -10,7 +10,8 @@ package ru.eleron.osa.lris.schedule.utils.frame;
 public enum ScenesInApplication
 {
     MAIN_MENU("frame/MainMenu.fxml"),
-    SCHEDULE_TABLE_NOW("frame/ScheduleTableNow.fxml");
+    SCHEDULE_TABLE_NOW("frame/ScheduleTableNow.fxml"),
+    CHOOSE_PLAN_FOR_DAY("frame/ChoosePlanForDay.fxml");
 
     private String url;
 

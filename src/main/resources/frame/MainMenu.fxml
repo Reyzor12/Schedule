@@ -20,17 +20,17 @@
       </AnchorPane>
       <AnchorPane layoutX="732.0" layoutY="100.0" maxHeight="940.0" maxWidth="282.0" minHeight="610.0" minWidth="282.0" prefHeight="610.0" prefWidth="282.0" styleClass="pane" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
          <children>
-            <Button alignment="CENTER" layoutX="31.0" layoutY="44.0" mnemonicParsing="false" onAction="#onClick" text="Выбрать" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="100.0">
+            <Button fx:id="chooseButton" alignment="CENTER" layoutX="31.0" layoutY="44.0" mnemonicParsing="false" onAction="#chooseButtonClicked" text="Выбрать" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="100.0">
                <styleClass>
                   <String fx:value="button-1" />
                   <String fx:value="button-default-1" />
                </styleClass></Button>
-            <Button alignment="CENTER" layoutX="115.0" layoutY="182.0" mnemonicParsing="false" text="Составить" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="200.0">
+            <Button fx:id="createButton" onAction="#createButtonClicked" alignment="CENTER" layoutX="115.0" layoutY="182.0" mnemonicParsing="false" text="Составить" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="200.0">
                <styleClass>
                   <String fx:value="button-1" />
                   <String fx:value="button-default-1" />
                </styleClass></Button>
-            <Button alignment="CENTER" layoutX="55.0" layoutY="320.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="192.0" text="Статистика" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="300.0">
+            <Button fx:id="statisticsButton" onAction="#statisticsButtonClicked" alignment="CENTER" layoutX="55.0" layoutY="320.0" mnemonicParsing="false" prefHeight="56.0" prefWidth="192.0" text="Статистика" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="300.0">
                <styleClass>
                   <String fx:value="button-default-1" />
                   <String fx:value="button-2" />
@@ -41,7 +41,7 @@
                   <String fx:value="label-text-3" />
                   <String fx:value="default-label-text-1" />
                </styleClass></Label>
-            <Button alignment="CENTER" layoutX="115.0" layoutY="430.0" mnemonicParsing="false" prefHeight="56.0" text="План" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="400.0">
+            <Button fx:id="planButton" onAction="#planButtonClicked" alignment="CENTER" layoutX="115.0" layoutY="430.0" mnemonicParsing="false" prefHeight="56.0" text="План" textAlignment="CENTER" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="400.0">
                <styleClass>
                   <String fx:value="button-default-1" />
                   <String fx:value="button-1" />

@@ -10,7 +10,23 @@ package ru.eleron.osa.lris.schedule.utils.storage;
 public enum ConstantsForElements
 {
 
-    EMPTY_CURRENT_TASK_TABLE("Задачи на сегодня отсутствуют");
+    EMPTY_CURRENT_TASK_TABLE("Задачи на сегодня отсутствуют"),
+
+    /**
+     * Path to images for spinner
+     * */
+
+    DEVISION("images/number/devision.png"),
+    NUMBER_1("images/number/1.png"),
+    NUMBER_2("images/number/2.png"),
+    NUMBER_3("images/number/3.png"),
+    NUMBER_4("images/number/4.png"),
+    NUMBER_5("images/number/5.png"),
+    NUMBER_6("images/number/6.png"),
+    NUMBER_7("images/number/7.png"),
+    NUMBER_8("images/number/8.png"),
+    NUMBER_9("images/number/9.png"),
+    NUMBER_0("images/number/0.png");
 
     private String message;
 
