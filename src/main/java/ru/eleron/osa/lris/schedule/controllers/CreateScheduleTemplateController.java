@@ -86,7 +86,7 @@ public class CreateScheduleTemplateController implements FrameControllerBaseIF
     public void addScheduleTemplateButtonClicked(ActionEvent event)
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
-        System.out.println("addSchedulteTemplateButtonClicked clicked");
+        fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.CREATE_SCHEDULE_MENU.getUrl()));
     }
     public void deleteScheduleTemplateButtonClicked(ActionEvent event)
     {

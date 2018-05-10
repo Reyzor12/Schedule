@@ -7,41 +7,50 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="610.0" prefWidth="714.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.TaskCreateUpdateMenuController">
    <children>
-      <Button layoutX="320.0" layoutY="547.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="190.0" text="Сохранить" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="250.0">
+      <Button fx:id="addButton" layoutX="320.0" layoutY="547.0" mnemonicParsing="false" onAction="#addButtonClicked" prefHeight="50.0" prefWidth="190.0" text="Сохранить" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="250.0">
          <styleClass>
             <String fx:value="button-default-1" />
             <String fx:value="button-1" />
          </styleClass>
       </Button>
-      <Button layoutX="529.0" layoutY="547.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="160.0" text="Отмена" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="30.0">
+      <Button fx:id="backButton" layoutX="529.0" layoutY="547.0" mnemonicParsing="false" onAction="#backButtonClicked" prefHeight="50.0" prefWidth="160.0" text="Отмена" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="30.0">
          <styleClass>
             <String fx:value="button-default-1" />
             <String fx:value="button-1" />
          </styleClass>
       </Button>
-      <Label layoutX="82.0" layoutY="60.0" prefHeight="50.0" prefWidth="200.0" text="Название" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="50.0">
+      <Label layoutX="82.0" layoutY="60.0" prefHeight="50.0" prefWidth="200.0" text="Название" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="100.0">
          <styleClass>
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-5" />
          </styleClass>
       </Label>
-      <TextField layoutX="300.0" layoutY="50.0" prefHeight="50.0" prefWidth="200.0" style="-fx-border-color: black;" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="50.0" />
-      <Label layoutX="95.0" layoutY="159.0" prefHeight="50.0" prefWidth="200.0" text="Время" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="150.0">
+      <TextField fx:id="nameTaskTextField" layoutX="300.0" layoutY="50.0" prefHeight="50.0" prefWidth="295.0" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="90.0">
+         <styleClass>
+            <String fx:value="default-label-text-1" />
+            <String fx:value="label-text-3" />
+         </styleClass></TextField>
+      <Label layoutX="95.0" layoutY="159.0" prefHeight="50.0" prefWidth="200.0" text="Время" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="200.0">
          <styleClass>
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-5" />
          </styleClass>
       </Label>
-      <Label layoutX="95.0" layoutY="297.0" prefHeight="50.0" prefWidth="200.0" text="Очки" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="250.0">
+      <Label layoutX="95.0" layoutY="297.0" prefHeight="50.0" prefWidth="200.0" text="Очки" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="300.0">
          <styleClass>
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-5" />
          </styleClass>
       </Label>
-      <Spinner layoutX="300.0" layoutY="150.0" prefHeight="50.0" prefWidth="200.0" style="-fx-border-color: black;" />
-      <Spinner layoutX="300.0" layoutY="250.0" prefHeight="50.0" prefWidth="200.0" style="-fx-border-color: black;" />
+      <Spinner fx:id="timeSpinner" layoutX="300.0" layoutY="150.0" prefHeight="50.0" prefWidth="140.0" styleClass="spinner-1" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="200.0" />
+      <Spinner fx:id="scoreSpinner" layoutX="300.0" layoutY="250.0" prefHeight="50.0" prefWidth="140.0" styleClass="spinner-1" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="300.0" />
+      <Label alignment="CENTER" layoutX="369.0" layoutY="42.0" prefHeight="50.0" text="Задача" textAlignment="CENTER" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="20.0">
+         <styleClass>
+            <String fx:value="default-label-text-1" />
+            <String fx:value="label-text-3" />
+         </styleClass>
+      </Label>
    </children>
 </AnchorPane>
