@@ -50,6 +50,13 @@
     -fx-alignment: center-left;
 }
 
+.label-text-5
+{
+    -fx-font: 24pt "Courier New";
+    -fx-alignment: center-left;
+    -fx-font-weight: bold;
+}
+
 .table-view-1
 {
     -fx-border-style: dashed;
