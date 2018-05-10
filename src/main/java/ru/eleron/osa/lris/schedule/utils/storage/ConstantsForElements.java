@@ -11,6 +11,8 @@ public enum ConstantsForElements
 {
 
     EMPTY_CURRENT_TASK_TABLE("Задачи на сегодня отсутствуют"),
+    EMPTY_TASK_TEMPLATES("Шаблоны задач отсутствуют"),
+    EMPTY_COMPOSITE_TASK("Задачи для шаблона отсутствуют"),
 
     /**
      * Path to images for spinner

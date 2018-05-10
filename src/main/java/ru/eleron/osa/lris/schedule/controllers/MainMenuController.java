@@ -81,7 +81,8 @@ public class MainMenuController implements FrameControllerBaseIF
     }
     public void createButtonClicked(ActionEvent event)
     {
-        System.out.println("create button clicked");
+        logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load(ScenesInApplication.CREATE_SCHEDULE_TEMPLATE.getUrl()));
     }
     public void statisticsButtonClicked(ActionEvent event)
     {
@@ -91,5 +92,10 @@ public class MainMenuController implements FrameControllerBaseIF
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
         fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
+    }
+
+    public AnchorPane getInformationAnchorPane()
+    {
+        return informationAnchorPane;
     }
 }

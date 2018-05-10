@@ -98,8 +98,8 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
         setSpinnerTime(spinner.previous());
         if (!spinner.hasPrevious()) ((Button)event.getSource()).setDisable(true);
     }
-    public void chooseTaskButtonClicked()
+    public void chooseTaskButtonClicked(ActionEvent event)
     {
-        System.out.println("chooseTaskButtonClicked");
+        logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
     }
 }
