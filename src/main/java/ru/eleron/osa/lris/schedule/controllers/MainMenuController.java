@@ -86,7 +86,8 @@ public class MainMenuController implements FrameControllerBaseIF
     }
     public void statisticsButtonClicked(ActionEvent event)
     {
-        System.out.println("statistics button clicked");
+        logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load(ScenesInApplication.STATISTIC_MENU.getUrl()));
     }
     public void planButtonClicked(ActionEvent event)
     {

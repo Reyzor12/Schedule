@@ -10,6 +10,7 @@ package ru.eleron.osa.lris.schedule.utils.frame;
 public enum ScenesInApplication
 {
     MAIN_MENU("frame/MainMenu.fxml"),
+    STATISTIC_MENU("frame/StatisticMenu.fxml"),
     SCHEDULE_TABLE_NOW("frame/ScheduleTableNow.fxml"),
     CREATE_SCHEDULE_TEMPLATE("frame/CreateScheduleTemplate.fxml"),
     CREATE_SCHEDULE_MENU("frame/CreateScheduleMenu.fxml"),
