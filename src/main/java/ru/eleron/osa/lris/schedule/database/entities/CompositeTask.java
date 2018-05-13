@@ -2,10 +2,7 @@ package ru.eleron.osa.lris.schedule.database.entities;
 
 import ru.eleron.osa.lris.schedule.database.patterns.ClonnableObject;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,6 +29,9 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
     private Integer time;
     @Column(name = "score")
     private Integer score;
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name="type")
+    private TypeOfCompositeTask type;
     @OneToMany
     private List<CompositeTask> children;
 
@@ -40,19 +40,22 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
         this.name = "";
         this.time = DEFAULT_TIME;
         this.score = DEFAULT_SCORE;
+        this.type = TypeOfCompositeTask.TASK;
         children = new ArrayList<>();
     }
 
-    public CompositeTask(String name, List<CompositeTask> compositeTaskList)
+    public CompositeTask(String name, TypeOfCompositeTask task, List<CompositeTask> compositeTaskList)
     {
         this.name = name;
         if (compositeTaskList == null || compositeTaskList.isEmpty())
         {
+            this.type = TypeOfCompositeTask.TASK;
             this.score = DEFAULT_SCORE;
             this.time = DEFAULT_TIME;
         } else {
             this.score = compositeTaskList.stream().mapToInt(CompositeTask::getScore).sum();
             this.time = compositeTaskList.stream().mapToInt(CompositeTask::getTime).sum();
+            this.type = task;
         }
     }
 
@@ -61,6 +64,7 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
         this.name = compositeTask.getName();
         this.score = compositeTask.getScore();
         this.time = compositeTask.getTime();
+        this.type = compositeTask.getType();
         final List<CompositeTask> anotherChildren = compositeTask.getChildren();
         this.children = anotherChildren == null ? null : (anotherChildren.isEmpty() ? new ArrayList<>() : anotherChildren.stream().map(compositeTask1 -> compositeTask1.clone()).collect(Collectors.toList()));
     }
@@ -179,12 +183,21 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
         }
     }
 
+    public TypeOfCompositeTask getType() {
+        return type;
+    }
+
+    public void setType(TypeOfCompositeTask type) {
+        this.type = type;
+    }
+
     public String toString()
     {
         return "CompositeTask{" +
                 "name='" + name + '\'' +
                 ", time=" + time +
                 ", score=" + score +
+                ", type=" + type.getType() +
                 '}';
     }
 
@@ -196,6 +209,7 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
         CompositeTask that = (CompositeTask) o;
         return Objects.equals(name, that.name) &&
                 Objects.equals(time, that.time) &&
+                Objects.equals(type, that.type) &&
                 Objects.equals(score, that.score);
     }
 
@@ -203,7 +217,7 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
     public int hashCode()
     {
 
-        return Objects.hash(name, time, score);
+        return Objects.hash(name, time, type, score);
     }
 
     @Override
