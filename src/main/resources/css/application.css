@@ -19,6 +19,16 @@
     -fx-font: 16pt "Courier New";
 }
 
+.pane-with-border-1
+{
+    -fx-border-width: 3px;
+    -fx-border-color: #00E020;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-background-color: #304030;
+    -fx-font: 14pt "Courier New";
+}
+
 .default-label-text-1
 {
     -fx-background-color: transparent;
@@ -53,6 +63,12 @@
 .label-text-5
 {
     -fx-font: 24pt "Courier New";
+    -fx-alignment: center-left;
+    -fx-font-weight: bold;
+}
+.label-text-6
+{
+    -fx-font: 16pt "Courier New";
     -fx-alignment: center-left;
     -fx-font-weight: bold;
 }
@@ -138,6 +154,16 @@
 {
     -fx-border-color: black;
 }
+.button-default-3
+{
+    -fx-border-color: #00E020;
+    -fx-text-fill: #00E020;
+    -fx-font: 16pt "Courier New";
+    -fx-font-weight: bold;
+    -fx-border-width: 3px;
+    -fx-border-radius: 6 6 0 0;
+    -fx-background-radius: 7 7 0 0;
+}
 
 .spinner-1 {
     -fx-background-color: #304030;
@@ -202,4 +228,58 @@
 .spinner-1 .decrement-arrow-button:pressed .decrement-arrow
 {
     -fx-background-color: #00c61c, #00c61c;
+}
+.chart-default-1
+{
+     -fx-background-color: black;
+     -fx-text-fill: #00E020;
+     -fx-legend-visible:false;
+}
+.axis
+{
+    -fx-font-size: 12px;
+    -fx-tick-label-fill: #00E020;
+    -fx-font-family: Courier New;
+    -fx-tick-length: 20;
+    -fx-minor-tick-length: 10;
+    -fx-stroke: #00E020;
+}
+.chart-default-1 .axis-label
+{
+    -fx-text-fill: #00E020;
+}
+.chart-horizontal-grid-lines
+{
+    -fx-stroke: #00E020;
+}
+.chart-vertical-grid-lines
+{
+    -fx-stroke: #00E020;
+}
+.chart-default-1 .axis-tick-mark
+{
+    -fx-stroke: #00E020;
+}
+.axis-minor-tick-mark
+{
+    -fx-stroke: #00E020;
+}
+.char-default-1 .chart-series-line
+{
+    -fx-stroke-width: 2px;
+}
+.char-default-1 .default-color0.chart-series-line
+{
+    -fx-stroke: #00E020;
+}
+
+.char-default-1 .chart-plot-background {
+    -fx-border-color: red;
+    -fx-border-style: solid;
+    -fx-border-width: 4px;
+    -fx-border-insets: -2px;
+}
+.chart-plot-background {
+    -fx-border-color: #00E020;
+    -fx-border-width: 0 0 4 4px;
 }

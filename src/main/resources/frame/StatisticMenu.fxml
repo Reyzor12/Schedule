@@ -1,18 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ru.eleron.osa.lris.schedule.controllers.StatisticMenuController"
-            prefHeight="400.0" prefWidth="600.0"
-            AnchorPane.bottomAnchor="0.0"
-            AnchorPane.leftAnchor="0.0"
-            AnchorPane.rightAnchor="0.0"
-            AnchorPane.topAnchor="0.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.StatisticMenuController">
+   <children>
+      <Button fx:id="weekButton" layoutX="56.0" layoutY="37.0" mnemonicParsing="false" onAction="#showStatisticForWeek" styleClass="button-default-3" text="неделя" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="35.0" />
+      <Button fx:id="monthButton" layoutX="176.0" layoutY="37.0" mnemonicParsing="false" onAction="#showStatisticForMonth" styleClass="button-default-3" text="месяц" AnchorPane.leftAnchor="180.0" AnchorPane.topAnchor="35.0" />
+      <AnchorPane fx:id="statisticAnchorPane" layoutX="25.0" layoutY="80.0" prefHeight="238.0" prefWidth="528.0" styleClass="pane-with-border-1" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <Label layoutX="33.0" layoutY="28.0" text="Пройдено курсов" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="20.0">
+               <styleClass>
+                  <String fx:value="default-label-text-1" />
+                  <String fx:value="label-text-6" />
+               </styleClass></Label>
+            <Label layoutX="33.0" layoutY="66.0" text="Пропущено курсов" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="70.0">
+               <styleClass>
+                  <String fx:value="default-label-text-1" />
+                  <String fx:value="label-text-6" />
+               </styleClass></Label>
+            <Label layoutX="33.0" layoutY="143.0" text="Очков получено" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="120.0">
+               <styleClass>
+                  <String fx:value="default-label-text-1" />
+                  <String fx:value="label-text-6" />
+               </styleClass></Label>
+            <Label layoutX="33.0" layoutY="182.0" text="Очков потеряно" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="170.0">
+               <styleClass>
+                  <String fx:value="default-label-text-1" />
+                  <String fx:value="label-text-6" />
+               </styleClass></Label>
+            <Label fx:id="countTaskDoneLabel" layoutX="177.0" layoutY="28.0" text="\%cdone" AnchorPane.leftAnchor="240.0" AnchorPane.topAnchor="20.0">
+               <styleClass>
+                  <String fx:value="default-label-text-1" />
+                  <String fx:value="label-text-6" />
+               </styleClass></Label>
+            <Label fx:id="countTaskFailLabel" layoutX="184.0" layoutY="66.0" text="\%cfail" AnchorPane.leftAnchor="240.0" AnchorPane.topAnchor="70.0">
+               <styleClass>
+                  <String fx:value="default-label-text-1" />
+                  <String fx:value="label-text-6" />
+               </styleClass></Label>
+            <Label fx:id="countScoreReceiveLabel" layoutX="184.0" layoutY="143.0" text="\%sreceive" AnchorPane.leftAnchor="240.0" AnchorPane.topAnchor="120.0">
+               <styleClass>
+                  <String fx:value="default-label-text-1" />
+                  <String fx:value="label-text-6" />
+               </styleClass></Label>
+            <Label fx:id="countScoreLostLabel" layoutX="186.0" layoutY="182.0" text="\%slost" AnchorPane.leftAnchor="240.0" AnchorPane.topAnchor="170.0">
+               <styleClass>
+                  <String fx:value="default-label-text-1" />
+                  <String fx:value="label-text-6" />
+               </styleClass></Label>
+         </children>
+      </AnchorPane>
+      <Button fx:id="clearStatisticButton" layoutX="454.0" layoutY="356.0" mnemonicParsing="false" onAction="#clearAllStatistic" text="Сбросить" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="25.0">
+         <styleClass>
+            <String fx:value="button-default-1" />
+            <String fx:value="button-2" />
+         </styleClass></Button>
+      <Button fx:id="showGraphicButton" layoutX="66.0" layoutY="356.0" mnemonicParsing="false" onAction="#showGraphic" text="График" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="25.0">
+         <styleClass>
+            <String fx:value="button-default-1" />
+            <String fx:value="button-2" />
+         </styleClass></Button>
+   </children>
 </AnchorPane>
