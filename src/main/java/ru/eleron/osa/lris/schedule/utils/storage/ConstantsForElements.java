@@ -19,6 +19,13 @@ public enum ConstantsForElements
     EMPTY_TASK("Задачи отсутствуют"),
 
     /**
+     * Label helpers
+     * */
+
+    LABEL_FIELD_DONT_FILL("поле не заполнено"),
+    LABEL_FIELD_NAME_EXIST("данное имя уже существует"),
+
+    /**
      * Path to arrow images
      * */
 

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.eleron.osa.lris.schedule.configurations.JpaConfigurations;
 import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.dao.StatisticClassDao;
-import ru.eleron.osa.lris.schedule.database.dao.TaskDao;
+import ru.eleron.osa.lris.schedule.database.dao.CompositeTaskDao;
 
 import static org.junit.Assert.*;
 
@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 public class StatisticClassTest {
 
     @Autowired
-    private TaskDao taskDao;
+    private CompositeTaskDao compositeTaskDao;
     @Autowired
     private ProxyCompositeTaskDao proxyCompositeTaskDao;
     @Autowired
@@ -31,7 +31,7 @@ public class StatisticClassTest {
 
     @Before
     public void initData() {
-        task = taskDao.getOne(1l);
+        task = compositeTaskDao.getOne(1l);
         assertTrue(task != null);
         proxyTask = proxyCompositeTaskDao.findByName("hello world");
         assertTrue(proxyTask != null);

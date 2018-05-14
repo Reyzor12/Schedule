@@ -1,5 +1,7 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -8,10 +10,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.database.dao.CompositeTaskDao;
+import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
+import ru.eleron.osa.lris.schedule.utils.cache.CompositeTaskCache;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
+import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Controller for fxml TaskCreateUpdateMenu
@@ -29,6 +37,8 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
     @FXML
     private TextField nameTaskTextField;
     @FXML
+    private Label fillNameWarningLabel;
+    @FXML
     private Spinner<Integer> timeSpinner;
     @FXML
     private Spinner<Integer> scoreSpinner;
@@ -43,6 +53,10 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
     private SpringFxmlLoader springFxmlLoader;
     @Autowired
     private FadeNodeControl fadeNodeControl;
+    @Autowired
+    private CompositeTaskCache compositeTaskCache;
+    @Autowired
+    private CompositeTaskDao compositeTaskDao;
 
     public void initialize()
     {
@@ -62,6 +76,7 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
     {
         timeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 180, 5, 5));
         scoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1));
+        fillNameWarningLabel.setVisible(false);
         logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
 
@@ -78,10 +93,41 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
     public void addButtonClicked(ActionEvent event)
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        String name = nameTaskTextField.getText().trim();
+        if (name.isEmpty() || name.equals(""))
+        {
+            //show warning message
+            fillNameWarningLabel.setText(ConstantsForElements.LABEL_FIELD_DONT_FILL.getMessage());
+            fillNameWarningLabel.setVisible(true);
+        } else {
+            //add element
+            if (compositeTaskCache.getCache().stream().anyMatch(compositeTask -> compositeTask.getName().equals(name)))
+            {
+                fillNameWarningLabel.setText(ConstantsForElements.LABEL_FIELD_NAME_EXIST.getMessage());
+                fillNameWarningLabel.setVisible(true);
+            } else {
+                final CompositeTask compositeTask = createTask();
+                CompletableFuture.runAsync(() -> {
+                    compositeTaskDao.save(compositeTask);
+                    compositeTaskCache.getCache().add(compositeTaskDao.getByName(compositeTask.getName()));
+                }).thenRunAsync(()-> Platform.runLater(() -> {
+
+                }) );
+            }
+        }
     }
     public void backButtonClicked(ActionEvent event)
     {
         fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.TASK_MANAGER_MENU.getUrl()));
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+    }
+
+    private CompositeTask createTask()
+    {
+        final CompositeTask compositeTask = new CompositeTask();
+        compositeTask.setName(nameTaskTextField.getText().trim());
+        compositeTask.setTime(timeSpinner.getValue());
+        compositeTask.setScore(scoreSpinner.getValue());
+        return compositeTask;
     }
 }

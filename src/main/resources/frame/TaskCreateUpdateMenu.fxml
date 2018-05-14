@@ -52,5 +52,11 @@
             <String fx:value="label-text-3" />
          </styleClass>
       </Label>
+      <Label fx:id="fillNameWarningLabel" layoutX="614.0" layoutY="117.0" text="не заполнено" AnchorPane.leftAnchor="300.0" AnchorPane.topAnchor="150.0">
+         <styleClass>
+            <String fx:value="default-label-text-1" />
+            <String fx:value="label-text-4" />
+         </styleClass>
+      </Label>
    </children>
 </AnchorPane>

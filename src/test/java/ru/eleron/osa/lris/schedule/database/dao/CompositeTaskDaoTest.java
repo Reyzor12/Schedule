@@ -11,25 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.eleron.osa.lris.schedule.configurations.JpaConfigurations;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
+import ru.eleron.osa.lris.schedule.database.entities.TypeOfCompositeTask;
 
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 
 import java.util.Date;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {JpaConfigurations.class})
 @Transactional
-public class TaskDaoTest {
+public class CompositeTaskDaoTest {
 
     @Resource
-    private TaskDao taskDao;
+    private CompositeTaskDao compositeTaskDao;
     @Resource
     private ProxyCompositeTaskDao proxyCompositeTaskDao;
 
@@ -47,11 +44,11 @@ public class TaskDaoTest {
         compositeTask.setName("Name");
         compositeTask.setScore(123);
         compositeTask.setTime(321);
-        leaf = new CompositeTask("List", null);
+        leaf = new CompositeTask("List", TypeOfCompositeTask.DAY, null);
         leaf.setScore(100);
         leaf.setTime(200);
         compositeTask.addChild(leaf);
-        anotherLeaf = new CompositeTask("Another Leaf", null);
+        anotherLeaf = new CompositeTask("Another Leaf", TypeOfCompositeTask.DAY, null);
         anotherLeaf.setScore(55);
         anotherLeaf.setTime(22);
         compositeTask.addChild(anotherLeaf);
@@ -61,11 +58,11 @@ public class TaskDaoTest {
     @Test
     public void addToDb() {
         assertTrue(compositeTask != null);
-        taskDao.save(leaf);
-        taskDao.save(anotherLeaf);
-        taskDao.save(compositeTask);
-        CompositeTask task2 = (CompositeTask) taskDao.getByName("Name");
-        System.out.println(taskDao.findAll());
+        compositeTaskDao.save(leaf);
+        compositeTaskDao.save(anotherLeaf);
+        compositeTaskDao.save(compositeTask);
+        CompositeTask task2 = (CompositeTask) compositeTaskDao.getByName("Name");
+        System.out.println(compositeTaskDao.findAll());
         assertTrue(task2 != null);
         assertTrue(compositeTask.equals(task2));
         assertTrue(task2.getName().equals(compositeTask.getName()));
