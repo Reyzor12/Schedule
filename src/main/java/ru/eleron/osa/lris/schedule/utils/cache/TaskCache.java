@@ -1,5 +1,6 @@
 package ru.eleron.osa.lris.schedule.utils.cache;
 
+import javafx.collections.ObservableList;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 
@@ -13,20 +14,8 @@ import java.util.List;
  * @since 14.05.2018
  */
 
-public abstract class TaskCache<T>
+public interface TaskCache<T>
 {
-    protected List<T> cache;
-
-    protected TaskCache()
-    {
-        cache = new ArrayList<>();
-    }
-
-    public List<T> getCache()
-    {
-        if (cache.isEmpty()) refresh();
-        return cache;
-    }
-
-    public abstract void refresh();
+    ObservableList<T> getObservableList();
+    void refreshData();
 }

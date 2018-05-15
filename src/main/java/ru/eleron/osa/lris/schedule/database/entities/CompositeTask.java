@@ -71,7 +71,7 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
 
     public boolean isTask()
     {
-        return children == null;
+        return type.equals(TypeOfCompositeTask.TASK);
     }
 
     public List<CompositeTask> getChildren()

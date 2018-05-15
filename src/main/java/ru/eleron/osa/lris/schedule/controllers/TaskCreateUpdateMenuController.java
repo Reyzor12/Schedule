@@ -1,7 +1,7 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
-import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -12,13 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.dao.CompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
-import ru.eleron.osa.lris.schedule.utils.cache.CompositeTaskCache;
+import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
+import ru.eleron.osa.lris.schedule.utils.cache.TaskTemplateCache;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -54,7 +56,7 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
     @Autowired
     private FadeNodeControl fadeNodeControl;
     @Autowired
-    private CompositeTaskCache compositeTaskCache;
+    private ObservableData observableData;
     @Autowired
     private CompositeTaskDao compositeTaskDao;
 
@@ -100,8 +102,12 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
             fillNameWarningLabel.setText(ConstantsForElements.LABEL_FIELD_DONT_FILL.getMessage());
             fillNameWarningLabel.setVisible(true);
         } else {
+            System.out.println(1);
+            System.out.println(((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).isEmpty());
+            ((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).stream().forEach(compositeTask -> System.out.println(compositeTask));
+            System.out.println(2);
             //add element
-            if (compositeTaskCache.getCache().stream().anyMatch(compositeTask -> compositeTask.getName().equals(name)))
+            if (!((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).stream().anyMatch(compositeTask -> compositeTask.getName().equals(name)))
             {
                 fillNameWarningLabel.setText(ConstantsForElements.LABEL_FIELD_NAME_EXIST.getMessage());
                 fillNameWarningLabel.setVisible(true);
@@ -109,9 +115,8 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
                 final CompositeTask compositeTask = createTask();
                 CompletableFuture.runAsync(() -> {
                     compositeTaskDao.save(compositeTask);
-                    compositeTaskCache.getCache().add(compositeTaskDao.getByName(compositeTask.getName()));
                 }).thenRunAsync(()-> Platform.runLater(() -> {
-
+                    ((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).add(compositeTaskDao.getByName(compositeTask.getName()));
                 }) );
             }
         }

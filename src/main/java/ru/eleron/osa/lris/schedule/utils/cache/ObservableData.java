@@ -1,7 +1,11 @@
 package ru.eleron.osa.lris.schedule.utils.cache;
 
 import javafx.collections.ObservableList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,20 +20,31 @@ import java.util.Map;
 @Component
 public class ObservableData
 {
-    private Map<String, ObservableList> data;
+    @Autowired
+    @Qualifier("taskTemplateCache")
+    private TaskCache<CompositeTask> taskTemplateCache;
+
+    private Map<String, TaskCache> data;
     private ObservableData()
     {
         data = new HashMap<>();
     }
 
-    enum Tables
-    {
-        TABLE_TASK_TEMPLATE("TABLE_TASK_TEMPLATE");
 
-        private String title;
-        Tables(String title)
-        {
-            this.title = title;
-        }
+    public void registerTableData(String templateName, TaskCache dataObject)
+    {
+        if (templateName != null && !templateName.trim().equals("") && dataObject != null) data.put(templateName, dataObject);
+    }
+
+    public ObservableList getData(String templateName)
+    {
+        if (data.isEmpty()) initData();
+        TaskCache result = data.getOrDefault(templateName, null);
+        return result.getObservableList();
+    }
+
+    private void initData()
+    {
+        registerTableData("TABLE_TASK_TEMPLATE", taskTemplateCache);
     }
 }
