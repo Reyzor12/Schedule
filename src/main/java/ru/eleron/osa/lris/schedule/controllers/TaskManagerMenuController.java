@@ -1,5 +1,9 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -9,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
+import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
+import ru.eleron.osa.lris.schedule.utils.cache.ObservableDataMarkers;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
@@ -49,6 +55,10 @@ public class TaskManagerMenuController implements FrameControllerBaseIF
     private SpringFxmlLoader springFxmlLoader;
     @Autowired
     private MainMenuController mainMenuController;
+    @Autowired
+    private ObservableData observableData;
+
+    private ObservableList<CompositeTask> templatesOfTasks;
 
     public void initialize()
     {
@@ -61,6 +71,7 @@ public class TaskManagerMenuController implements FrameControllerBaseIF
     @Override
     public void initData()
     {
+        templatesOfTasks = observableData.getData(ObservableDataMarkers.TASK_TEMPLATES.getValue());
         logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
@@ -68,6 +79,10 @@ public class TaskManagerMenuController implements FrameControllerBaseIF
     public void configureElements()
     {
         compositeTaskTableView.setPlaceholder(new Label(ConstantsForElements.EMPTY_TASK_TEMPLATES.getMessage()));
+        nameCompositeTaskTableColumn.setCellValueFactory(item -> new SimpleStringProperty(item.getValue().getName()));
+        timeCompositeTaskTableColumn.setCellValueFactory(item -> new SimpleObjectProperty(item.getValue().getTime()));
+        scoreCompositeTaskTableColumn.setCellValueFactory(item -> new SimpleObjectProperty(item.getValue().getScore()));
+        compositeTaskTableView.setItems(templatesOfTasks);
         logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
 

@@ -40,7 +40,7 @@ public class ObservableData
     {
         if (data.isEmpty()) initData();
         TaskCache result = data.getOrDefault(templateName, null);
-        return result.getObservableList();
+        return  result == null ? null : result.getObservableList();
     }
 
     private void initData()

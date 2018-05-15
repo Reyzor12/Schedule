@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.dao.CompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
+import ru.eleron.osa.lris.schedule.utils.cache.ObservableDataMarkers;
 import ru.eleron.osa.lris.schedule.utils.cache.TaskTemplateCache;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
@@ -69,7 +70,8 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
     }
 
     @Override
-    public void initData() {
+    public void initData()
+    {
         logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
@@ -102,12 +104,8 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
             fillNameWarningLabel.setText(ConstantsForElements.LABEL_FIELD_DONT_FILL.getMessage());
             fillNameWarningLabel.setVisible(true);
         } else {
-            System.out.println(1);
-            System.out.println(((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).isEmpty());
-            ((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).stream().forEach(compositeTask -> System.out.println(compositeTask));
-            System.out.println(2);
             //add element
-            if (!((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).stream().anyMatch(compositeTask -> compositeTask.getName().equals(name)))
+            if (((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).stream().anyMatch(compositeTask -> compositeTask.getName().equals(name)))
             {
                 fillNameWarningLabel.setText(ConstantsForElements.LABEL_FIELD_NAME_EXIST.getMessage());
                 fillNameWarningLabel.setVisible(true);
@@ -116,8 +114,9 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
                 CompletableFuture.runAsync(() -> {
                     compositeTaskDao.save(compositeTask);
                 }).thenRunAsync(()-> Platform.runLater(() -> {
-                    ((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).add(compositeTaskDao.getByName(compositeTask.getName()));
+                    ((ObservableList<CompositeTask>) observableData.getData(ObservableDataMarkers.TASK_TEMPLATES.getValue())).add(compositeTaskDao.getByName(compositeTask.getName()));
                 }) );
+                fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.TASK_MANAGER_MENU.getUrl()));
             }
         }
     }

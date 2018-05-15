@@ -107,6 +107,31 @@
     -fx-font: 14pt "Courier New";
     -fx-text-fill: #00E020;
 }
+.table-view-1 .table-cell
+{
+    -fx-border-style: dashed;
+    -fx-border-color: #00E020;
+    -fx-border-width: 0 2 2 0;
+    -fx-background-color:transparent;
+}
+.table-view-1 .table-row-cell
+{
+    -fx-background-color: black, #304030;
+}
+.table-view-1 .table-row-cell .text
+{
+    -fx-fill: #00E020;
+}
+.table-view-1 .table-row-cell:selected
+{
+    -fx-background-color: #00E020;
+    -fx-background-insets: -1;
+}
+
+.table-view-1 .table-row-cell:selected .text
+{
+    -fx-fill: black;
+}
 
 .button-default-1
 {

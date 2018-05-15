@@ -29,6 +29,7 @@ public class TaskTemplateCache implements TaskCache<CompositeTask>
 
     @Override
     public ObservableList<CompositeTask> getObservableList() {
+        if (cache.isEmpty()) refreshData();
         return cache;
     }
 
