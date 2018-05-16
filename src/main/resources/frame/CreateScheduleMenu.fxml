@@ -7,13 +7,14 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.CreateScheduleMenuController">
    <children>
-      <Button fx:id="leftRemoveButton" layoutX="266.0" layoutY="108.0" mnemonicParsing="false" onMouseEntered="#focusLeftButton" onMouseExited="#focusLostLeftButton" prefHeight="40.0" prefWidth="40.0" styleClass="button-default-1" AnchorPane.leftAnchor="235.0" AnchorPane.topAnchor="100.0">
+      <Button onAction="#addTaskToDayTemplate" fx:id="leftRemoveButton" layoutX="266.0" layoutY="108.0" mnemonicParsing="false" onMouseEntered="#focusLeftButton" onMouseExited="#focusLostLeftButton" prefHeight="40.0" prefWidth="40.0" styleClass="button-default-1" AnchorPane.leftAnchor="235.0" AnchorPane.topAnchor="100.0">
          <graphic>
             <ImageView fx:id="leftImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -21,7 +22,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button fx:id="rightAddButton" layoutX="266.0" layoutY="176.0" mnemonicParsing="false" onMouseEntered="#focusRightButton" onMouseExited="#focusLostRightButton" prefHeight="40.0" prefWidth="40.0" styleClass="button-default-1" AnchorPane.bottomAnchor="180.0" AnchorPane.leftAnchor="235.0">
+      <Button onAction="#removeTaskFromDayTemplate" fx:id="rightAddButton" layoutX="266.0" layoutY="176.0" mnemonicParsing="false" onMouseEntered="#focusRightButton" onMouseExited="#focusLostRightButton" prefHeight="40.0" prefWidth="40.0" styleClass="button-default-1" AnchorPane.bottomAnchor="180.0" AnchorPane.leftAnchor="235.0">
          <graphic>
             <ImageView fx:id="rightImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -48,7 +49,7 @@
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-1" />
          </styleClass></Label>
-      <Label layoutX="117.0" layoutY="357.0" prefHeight="16.0" prefWidth="49.0" text="120" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="145.0">
+      <Label fx:id="timeLabel" layoutX="117.0" layoutY="357.0" prefHeight="16.0" prefWidth="49.0" text="120" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="145.0">
          <styleClass>
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-5" />
@@ -58,20 +59,26 @@
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-1" />
          </styleClass></Label>
-      <Label layoutX="474.0" layoutY="357.0" text="100" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="350.0">
+      <Label fx:id="scoreLabel" layoutX="474.0" layoutY="357.0" text="100" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="350.0">
          <styleClass>
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-5" />
          </styleClass></Label>
-      <Button fx:id="saveButton" layoutX="521.0" layoutY="361.0" mnemonicParsing="false" text="Сохранить" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">
+      <Button onAction="#saveDayTemplate" fx:id="saveButton" layoutX="521.0" layoutY="361.0" mnemonicParsing="false" text="Сохранить" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">
          <styleClass>
             <String fx:value="button-default-1" />
             <String fx:value="button-1" />
          </styleClass></Button>
-      <Label layoutX="266.0" layoutY="21.0" prefHeight="35.0" prefWidth="580.0" text="Шаблон расписания" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="10.0">
+      <Label layoutX="266.0" layoutY="21.0" prefHeight="35.0" prefWidth="580.0" text="Шаблон" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="350.0" AnchorPane.topAnchor="15.0">
+         <styleClass>
+            <String fx:value="default-label-text-1" />
+            <String fx:value="label-text-5" />
+         </styleClass></Label>
+      <TextField fx:id="nameTextField" alignment="CENTER" layoutX="322.0" layoutY="15.0" prefHeight="35.0" prefWidth="149.0" AnchorPane.leftAnchor="250.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="1.0">
          <styleClass>
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-3" />
-         </styleClass></Label>
+         </styleClass>
+      </TextField>
    </children>
 </AnchorPane>
