@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.dao.CompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
+import ru.eleron.osa.lris.schedule.database.entities.TypeOfCompositeTask;
 
 /**
- * Cache for composite task
+ * Cache for composite task, it's realisation of {@link TaskCache}, and use in cache pool {@link ObservableData}
  * @author Reyzor
  * @version 1.0
  * @since 14.05.2018
@@ -18,6 +19,7 @@ import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 public class TaskTemplateCache implements TaskCache<CompositeTask>
 {
     private ObservableList<CompositeTask> cache;
+    private Boolean isInitCache;
 
     @Autowired
     private CompositeTaskDao compositeTaskDao;
@@ -25,16 +27,18 @@ public class TaskTemplateCache implements TaskCache<CompositeTask>
     private TaskTemplateCache()
     {
         cache = FXCollections.observableArrayList();
+        isInitCache = false;
     }
 
     @Override
     public ObservableList<CompositeTask> getObservableList() {
-        if (cache.isEmpty()) refreshData();
+        if (!isInitCache) refreshData();
         return cache;
     }
 
     @Override
     public void refreshData() {
-        cache.setAll(compositeTaskDao.findAll());
+        cache.setAll(compositeTaskDao.getByType(TypeOfCompositeTask.TASK));
+        isInitCache = true;
     }
 }

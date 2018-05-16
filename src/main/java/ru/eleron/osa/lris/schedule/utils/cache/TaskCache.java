@@ -1,14 +1,10 @@
 package ru.eleron.osa.lris.schedule.utils.cache;
 
 import javafx.collections.ObservableList;
-import org.springframework.stereotype.Component;
-import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Cache for composite task
+ * Cache for composite task, it's use in cache pool
+ * @see ObservableData
  * @author Reyzor
  * @version 1.0
  * @since 14.05.2018
@@ -16,6 +12,14 @@ import java.util.List;
 
 public interface TaskCache<T>
 {
+    /**
+     * Get objects from DB and wrap it into observable list
+     * */
     ObservableList<T> getObservableList();
+
+    /**
+     * Get objects from DB
+     * */
+
     void refreshData();
 }

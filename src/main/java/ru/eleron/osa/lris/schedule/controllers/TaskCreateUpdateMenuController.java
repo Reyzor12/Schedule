@@ -14,14 +14,12 @@ import ru.eleron.osa.lris.schedule.database.dao.CompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableDataMarkers;
-import ru.eleron.osa.lris.schedule.utils.cache.TaskTemplateCache;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
 
-import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -61,6 +59,8 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
     @Autowired
     private CompositeTaskDao compositeTaskDao;
 
+    private CompositeTask compositeTask;
+
     public void initialize()
     {
         initData();
@@ -81,6 +81,12 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
         timeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(5, 180, 5, 5));
         scoreSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1));
         fillNameWarningLabel.setVisible(false);
+        if (compositeTask != null)
+        {
+            nameTaskTextField.setText(compositeTask.getName());
+            timeSpinner.getValueFactory().setValue(compositeTask.getTime());
+            scoreSpinner.getValueFactory().setValue(compositeTask.getScore());
+        }
         logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
 
@@ -100,23 +106,23 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
         String name = nameTaskTextField.getText().trim();
         if (name.isEmpty() || name.equals(""))
         {
-            //show warning message
+            //show warning message if name don't feel
             fillNameWarningLabel.setText(ConstantsForElements.LABEL_FIELD_DONT_FILL.getMessage());
             fillNameWarningLabel.setVisible(true);
         } else {
             //add element
-            if (((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).stream().anyMatch(compositeTask -> compositeTask.getName().equals(name)))
+            if (((ObservableList<CompositeTask>) observableData.getData("TABLE_TASK_TEMPLATE")).stream().anyMatch(compositeTask -> compositeTask.getName().equals(name)) && (compositeTask == null || !compositeTask.getName().equals(name)))
             {
+                //show warning message if name equals to another name of other composite task
                 fillNameWarningLabel.setText(ConstantsForElements.LABEL_FIELD_NAME_EXIST.getMessage());
                 fillNameWarningLabel.setVisible(true);
             } else {
-                final CompositeTask compositeTask = createTask();
-                CompletableFuture.runAsync(() -> {
-                    compositeTaskDao.save(compositeTask);
-                }).thenRunAsync(()-> Platform.runLater(() -> {
-                    ((ObservableList<CompositeTask>) observableData.getData(ObservableDataMarkers.TASK_TEMPLATES.getValue())).add(compositeTaskDao.getByName(compositeTask.getName()));
-                }) );
-                fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.TASK_MANAGER_MENU.getUrl()));
+                if (compositeTask == null)
+                {
+                    saveCompositeTask();
+                } else {
+                    updateCompositeTask();
+                }
             }
         }
     }
@@ -126,12 +132,76 @@ public class TaskCreateUpdateMenuController implements FrameControllerBaseIF {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
     }
 
+    /**
+     * Task builder
+     * Task build according information in frame
+     * @return CompositeTask
+     * */
+
     private CompositeTask createTask()
     {
-        final CompositeTask compositeTask = new CompositeTask();
-        compositeTask.setName(nameTaskTextField.getText().trim());
+        final CompositeTask compositeTaskTemp = new CompositeTask();
+        compositeTaskTemp.setName(nameTaskTextField.getText().trim());
+        compositeTaskTemp.setTime(timeSpinner.getValue());
+        compositeTaskTemp.setScore(scoreSpinner.getValue());
+        return compositeTaskTemp;
+    }
+
+    /**
+     * Task filler
+     * Task fill according information in frame     *
+     * */
+
+    private void fillTask()
+    {
+        compositeTask.setName(nameTaskTextField.getText());
         compositeTask.setTime(timeSpinner.getValue());
         compositeTask.setScore(scoreSpinner.getValue());
-        return compositeTask;
+    }
+
+    /**
+     * Set composite task if it have to be edit
+     * */
+
+    public void setCompositeTask(CompositeTask compositeTask)
+    {
+        this.compositeTask = compositeTask;
+    }
+
+    /**
+     * Method save new Task at DB and return to previous frame
+     * */
+
+    private void saveCompositeTask()
+    {
+        final CompositeTask compositeTaskTemp = createTask();
+        CompletableFuture.runAsync(() -> {
+            compositeTaskDao.save(compositeTaskTemp);
+        })
+                .exceptionally(e -> {
+                    logger.error("Error then save task " + compositeTaskTemp, e);
+                    return null;
+                })
+                .thenRunAsync(()-> Platform.runLater(() -> {
+            ((ObservableList<CompositeTask>) observableData.getData(ObservableDataMarkers.TASK_TEMPLATES.getValue())).add(compositeTaskDao.getByName(compositeTaskTemp.getName()));
+            fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.TASK_MANAGER_MENU.getUrl()));
+        }) );
+    }
+
+    /**
+     * Method update current task at DB and return to previous frame
+     * */
+
+    private void updateCompositeTask()
+    {
+        fillTask();
+        CompletableFuture.runAsync(() -> {
+            compositeTaskDao.save(compositeTask);
+        }).exceptionally(e -> {
+            logger.error("Error then updating task " + compositeTask, e);
+            return null;
+        }).thenRunAsync(()-> Platform.runLater(() -> {
+            fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.TASK_MANAGER_MENU.getUrl()));
+        }) );
     }
 }

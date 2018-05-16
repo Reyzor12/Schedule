@@ -1,6 +1,6 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.database.dao.CompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableDataMarkers;
@@ -20,6 +21,8 @@ import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
+
+import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -57,6 +60,10 @@ public class TaskManagerMenuController implements FrameControllerBaseIF
     private MainMenuController mainMenuController;
     @Autowired
     private ObservableData observableData;
+    @Autowired
+    private TaskCreateUpdateMenuController taskCreateUpdateMenuController;
+    @Autowired
+    private CompositeTaskDao compositeTaskDao;
 
     private ObservableList<CompositeTask> templatesOfTasks;
 
@@ -82,6 +89,9 @@ public class TaskManagerMenuController implements FrameControllerBaseIF
         nameCompositeTaskTableColumn.setCellValueFactory(item -> new SimpleStringProperty(item.getValue().getName()));
         timeCompositeTaskTableColumn.setCellValueFactory(item -> new SimpleObjectProperty(item.getValue().getTime()));
         scoreCompositeTaskTableColumn.setCellValueFactory(item -> new SimpleObjectProperty(item.getValue().getScore()));
+        BooleanBinding isSelectedItem = compositeTaskTableView.getSelectionModel().selectedItemProperty().isNotNull().not();
+        editCompositeTaskButton.disableProperty().bind(isSelectedItem);
+        removeCompositeTaskButton.disableProperty().bind(isSelectedItem);
         compositeTaskTableView.setItems(templatesOfTasks);
         logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
@@ -98,15 +108,26 @@ public class TaskManagerMenuController implements FrameControllerBaseIF
     public void editCompositeTaskButtonClicked(ActionEvent event)
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        final CompositeTask compositeTaskTemp = compositeTaskTableView.getSelectionModel().getSelectedItem();
+        taskCreateUpdateMenuController.setCompositeTask(compositeTaskTemp);
         fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.TASK_CREATE_UPDATE_MENU.getUrl()));
     }
     public void addCompositeTaskButtonClicked(ActionEvent event)
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        taskCreateUpdateMenuController.setCompositeTask(null);
         fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.TASK_CREATE_UPDATE_MENU.getUrl()));
     }
     public void removeCompositeTaskButtonClicked(ActionEvent event)
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        final CompositeTask compositeTaskTemp = compositeTaskTableView.getSelectionModel().getSelectedItem();
+        CompletableFuture
+                .runAsync(() -> compositeTaskDao.delete(compositeTaskTemp))
+                .exceptionally(e -> {
+                    logger.error("Can't delete element " + compositeTaskTemp, e);
+                    return null;
+                })
+                .thenRunAsync(() -> observableData.getData(ObservableDataMarkers.TASK_TEMPLATES.getValue()).remove(compositeTaskTemp));
     }
 }
