@@ -32,7 +32,7 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
     @Enumerated(EnumType.ORDINAL)
     @Column(name="type")
     private TypeOfCompositeTask type;
-    @OneToMany
+    @ManyToMany
     private List<CompositeTask> children;
 
     public CompositeTask()
@@ -56,6 +56,7 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
             this.score = compositeTaskList.stream().mapToInt(CompositeTask::getScore).sum();
             this.time = compositeTaskList.stream().mapToInt(CompositeTask::getTime).sum();
             this.type = task;
+            this.children = compositeTaskList;
         }
     }
 

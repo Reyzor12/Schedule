@@ -1,10 +1,13 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,11 +15,18 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.database.dao.CompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
+import ru.eleron.osa.lris.schedule.database.entities.TypeOfCompositeTask;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableDataMarkers;
+import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
+import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
+import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Controller for creating templates of schedule
@@ -59,11 +69,22 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
     private Label scoreLabel;
     @FXML
     private Label timeLabel;
+    @FXML
+    private Label infoLabel;
 
     @Autowired
     private ObservableData observableData;
+    @Autowired
+    private CompositeTaskDao compositeTaskDao;
+    @Autowired
+    private FadeNodeControl fadeNodeControl;
+    @Autowired
+    private SpringFxmlLoader springFxmlLoader;
+    @Autowired
+    private MainMenuController mainMenuController;
 
     private ObservableList<CompositeTask> templateCompositeTaskObservableList;
+    private ObservableList<CompositeTask> dayTemplateCompositeTaskObservableList;
     private Integer timeCompositeTask;
     private Integer scoreCompositeTask;
 
@@ -82,6 +103,14 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
         timeCompositeTask = DEFAULT_TIME;
         scoreCompositeTask = DEFAULT_SCORE;
 
+        logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
+    }
+
+    @Override
+    public void configureElements()
+    {
+        infoLabel.setVisible(false);
+
         nameTableColumn.setCellValueFactory(value -> new SimpleStringProperty(value.getValue().getName()));
         timeTableColumn.setCellValueFactory(value -> new SimpleObjectProperty(value.getValue().getTime()));
         scoreTableColumn.setCellValueFactory(value -> new SimpleObjectProperty(value.getValue().getScore()));
@@ -90,7 +119,6 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
             @Override
             protected void updateItem(CompositeTask item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setText(null);
                 } else {
@@ -110,12 +138,6 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
         timeLabel.setText(timeCompositeTask.toString());
         scoreLabel.setText(scoreCompositeTask.toString());
 
-        logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
-    }
-
-    @Override
-    public void configureElements()
-    {
         compositeTaskTableView.setPlaceholder(new Label(ConstantsForElements.EMPTY_TASK.getMessage()));
         logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
@@ -129,6 +151,10 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
         compositeTaskListView.setTooltip(new Tooltip("Список задач в шаблоне"));
         compositeTaskTableView.setTooltip(new Tooltip("Список всех задач"));
     }
+
+    /**
+     * Change image on buttons if user hover mouse on it
+     * */
 
     public void focusLeftButton()
     {
@@ -146,21 +172,115 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
     {
         rightImage.setImage(new Image(getClass().getClassLoader().getResource(ConstantsForElements.ARROW_RIGHT.getMessage()).toString()));
     }
-    public void addTaskToDayTemplate()
+
+    /**
+     * add Task Template into the Day Template
+     * and update statistic information
+     * */
+
+    public void addTaskToDayTemplate(ActionEvent event)
     {
+        logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
         final CompositeTask compositeTaskTemp = compositeTaskTableView.getSelectionModel().getSelectedItem();
         compositeTaskListView.getItems().add(compositeTaskTemp);
         timeCompositeTask += compositeTaskTemp.getTime();
         scoreCompositeTask += compositeTaskTemp.getScore();
+        refreshLabelStatistic();
+    }
+
+    /**
+     * remove Task Template from the Day Template
+     * and update statistic information
+     * */
+
+    public void removeTaskFromDayTemplate(ActionEvent event)
+    {
+        logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        final CompositeTask compositeTaskTemp = compositeTaskListView.getSelectionModel().getSelectedItem();
+        compositeTaskListView.getItems().remove(compositeTaskTemp);
+        timeCompositeTask -= compositeTaskTemp.getTime();
+        scoreCompositeTask -= compositeTaskTemp.getScore();
+        refreshLabelStatistic();
+    }
+
+    /**
+     * Collect data from frame and produce Day Template {@link CompositeTask}
+     * after that, method save it in database
+     * */
+
+    public void saveDayTemplate(ActionEvent event)
+    {
+        logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        final String name = nameTextField.getText();
+        if (name.isEmpty())
+        {
+            setInformation(ConstantsForElements.LABEL_FIELD_NAME_DONT_GET.getMessage());
+            return;
+        } else if (checkUniqueName(name))
+        {
+            setInformation(ConstantsForElements.LABEL_FIELD_NAME_EXIST.getMessage());
+            return;
+        }
+        final ObservableList<CompositeTask> children = compositeTaskListView.getItems();
+        if (children.isEmpty())
+        {
+            setInformation(ConstantsForElements.EMPTY_COMPOSITE_TASK.getMessage());
+            return;
+        }
+        final CompositeTask dayTemplateForSave = new CompositeTask(name, TypeOfCompositeTask.DAY, children);
+        saveDayTemplateInDatabase(dayTemplateForSave);
+    }
+
+    /**
+     * Refresh text in label timeLabel and scoreLabel with new values of
+     * timeCompositeTask and scoreCompositeTask
+     * */
+
+    private void refreshLabelStatistic()
+    {
         timeLabel.setText(timeCompositeTask.toString());
         scoreLabel.setText(scoreCompositeTask.toString());
     }
-    public void removeTaskFromDayTemplate()
-    {
 
+    /**
+     * Check name of Task Day for it unique
+     * @param name - checked name
+     * */
+
+    private boolean checkUniqueName(String name)
+    {
+        dayTemplateCompositeTaskObservableList = observableData.getData(ObservableDataMarkers.DAY_TASK_TEMPLATES.getValue());
+        if (dayTemplateCompositeTaskObservableList == null || dayTemplateCompositeTaskObservableList.isEmpty()) return false;
+        if (dayTemplateCompositeTaskObservableList.stream().anyMatch(item -> item.getName().equals(name))) return true;
+        return false;
     }
-    public void saveDayTemplate()
-    {
 
+    /**
+     * show information in infoLabel
+     * @param information - text of information
+     * */
+
+    private void setInformation(String information)
+    {
+        infoLabel.setVisible(true);
+        infoLabel.setText(information);
+    }
+
+    /**
+     * save compositeTask in database and back to previous scene
+     * */
+
+    private void saveDayTemplateInDatabase(CompositeTask compositeTaskTemp)
+    {
+        CompletableFuture
+                .runAsync(() -> compositeTaskDao.save(compositeTaskTemp))
+                .exceptionally(e -> {
+                    logger.info("Error then save task " + compositeTaskTemp, e);
+                    return null;
+                })
+                .thenRunAsync(() -> Platform.runLater(() -> {
+                    dayTemplateCompositeTaskObservableList.add(compositeTaskDao.getByName(compositeTaskTemp.getName()));
+                    fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.CREATE_SCHEDULE_TEMPLATE.getUrl()));
+                }));
     }
 }

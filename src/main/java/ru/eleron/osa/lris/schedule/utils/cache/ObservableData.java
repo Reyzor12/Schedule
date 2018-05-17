@@ -23,6 +23,9 @@ public class ObservableData
     @Autowired
     @Qualifier("taskTemplateCache")
     private TaskCache<CompositeTask> taskTemplateCache;
+    @Autowired
+    @Qualifier("dayTaskTemplateCache")
+    private TaskCache<CompositeTask> dayTaskTemplateCache;
 
     //cache pool with all observable cache
     private Map<String, TaskCache> data;
@@ -64,7 +67,8 @@ public class ObservableData
 
     private void initData()
     {
-        registerTableData("TABLE_TASK_TEMPLATE", taskTemplateCache);
+        registerTableData(ObservableDataMarkers.TASK_TEMPLATES.getValue(), taskTemplateCache);
+        registerTableData(ObservableDataMarkers.DAY_TASK_TEMPLATES.getValue(), dayTaskTemplateCache);
         isInit = true;
     }
 }

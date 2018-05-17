@@ -6,7 +6,8 @@ package ru.eleron.osa.lris.schedule.utils.cache;
  * */
 
 public enum ObservableDataMarkers {
-    TASK_TEMPLATES("TABLE_TASK_TEMPLATE");
+    TASK_TEMPLATES("TABLE_TASK_TEMPLATE"),
+    DAY_TASK_TEMPLATES("DAY_TASK_TEMPLATES");
 
     private String value;
 

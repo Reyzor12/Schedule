@@ -354,3 +354,28 @@
 {
     -fx-background-color: transparent;
 }
+.list-view-1
+{
+    -fx-border-style: dashed;
+    -fx-border-color: #00E020;
+    -fx-border-width: 3px;
+    -fx-background-color: transparent;
+    -fx-font: 14pt "Courier New";
+    -fx-text-fill: #00E020;
+    -fx-border-radius: 7px;
+}
+.list-view-1 .list-cell
+{
+    -fx-font: 14pt "Courier New";
+    -fx-text-fill: #00E020;
+}
+.list-view-1 .list-cell:filled:selected:focused, .list-cell:filled:selected
+{
+    -fx-background-color: #00E020;
+    -fx-text-fill: black;
+}
+.list-view-1 .list-cell:filled:hover
+{
+    -fx-background-color: #4c664c;
+    -fx-text-fill: #00E020;
+}

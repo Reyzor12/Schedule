@@ -24,6 +24,7 @@ public enum ConstantsForElements
 
     LABEL_FIELD_DONT_FILL("поле не заполнено"),
     LABEL_FIELD_NAME_EXIST("данное имя уже существует"),
+    LABEL_FIELD_NAME_DONT_GET("не задано имя"),
 
     /**
      * Path to arrow images

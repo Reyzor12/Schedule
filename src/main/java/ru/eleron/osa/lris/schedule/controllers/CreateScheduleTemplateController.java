@@ -1,5 +1,7 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -9,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
+import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
+import ru.eleron.osa.lris.schedule.utils.cache.ObservableDataMarkers;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
@@ -51,6 +55,11 @@ public class CreateScheduleTemplateController implements FrameControllerBaseIF
     private FadeNodeControl fadeNodeControl;
     @Autowired
     private SpringFxmlLoader springFxmlLoader;
+    @Autowired
+    private ObservableData observableData;
+
+    private ObservableList<CompositeTask> dayTemplateTaskObservableList;
+    private ObservableList<CompositeTask> taskInTemplateObservableList;
 
     public void initialize()
     {
@@ -63,6 +72,8 @@ public class CreateScheduleTemplateController implements FrameControllerBaseIF
     @Override
     public void initData()
     {
+        dayTemplateTaskObservableList = observableData.getData(ObservableDataMarkers.DAY_TASK_TEMPLATES.getValue());
+        taskInTemplateObservableList = FXCollections.observableArrayList();
         logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
@@ -70,6 +81,24 @@ public class CreateScheduleTemplateController implements FrameControllerBaseIF
     public void configureElements()
     {
         compositeTaskTableView.setPlaceholder(new Label(ConstantsForElements.EMPTY_COMPOSITE_TASK.getMessage()));
+
+        compositeTaskListView.setCellFactory(cell -> new ListCell<CompositeTask>()
+        {
+            @Override
+            protected void updateItem(CompositeTask task, boolean empty)
+            {
+                super.updateItem(task, empty);
+                if (empty || task == null)
+                {
+                    setText(null);
+                } else {
+                    setText(task.getName() + " " + task.getTime() + "c " + task.getScore());
+                }
+            }
+        });
+
+        compositeTaskListView.setItems(dayTemplateTaskObservableList);
+
         logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
 

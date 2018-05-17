@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="610.0" prefWidth="714.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.CreateScheduleTemplateController">
    <children>
-      <ListView fx:id="compositeTaskListView" layoutX="5.0" layoutY="60.0" prefHeight="420.0" prefWidth="194.0" styleClass="table-view-1" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="60.0" />
+      <ListView fx:id="compositeTaskListView" layoutX="5.0" layoutY="60.0" prefHeight="420.0" prefWidth="194.0" styleClass="list-view-1" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="60.0" />
       <Button fx:id="addScheduleTemplateButton" layoutX="5.0" layoutY="545.0" mnemonicParsing="false" onAction="#addScheduleTemplateButtonClicked" prefHeight="25.0" prefWidth="194.0" text="Создать" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0">
          <styleClass>
             <String fx:value="button-default-1" />

@@ -14,7 +14,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.eleron.osa.lris.schedule.controllers.CreateScheduleMenuController">
    <children>
-      <Button onAction="#addTaskToDayTemplate" fx:id="leftRemoveButton" layoutX="266.0" layoutY="108.0" mnemonicParsing="false" onMouseEntered="#focusLeftButton" onMouseExited="#focusLostLeftButton" prefHeight="40.0" prefWidth="40.0" styleClass="button-default-1" AnchorPane.leftAnchor="235.0" AnchorPane.topAnchor="100.0">
+      <Button fx:id="leftRemoveButton" layoutX="266.0" layoutY="108.0" mnemonicParsing="false" onAction="#addTaskToDayTemplate" onMouseEntered="#focusLeftButton" onMouseExited="#focusLostLeftButton" prefHeight="40.0" prefWidth="40.0" styleClass="button-default-1" AnchorPane.leftAnchor="235.0" AnchorPane.topAnchor="100.0">
          <graphic>
             <ImageView fx:id="leftImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -22,7 +22,7 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button onAction="#removeTaskFromDayTemplate" fx:id="rightAddButton" layoutX="266.0" layoutY="176.0" mnemonicParsing="false" onMouseEntered="#focusRightButton" onMouseExited="#focusLostRightButton" prefHeight="40.0" prefWidth="40.0" styleClass="button-default-1" AnchorPane.bottomAnchor="180.0" AnchorPane.leftAnchor="235.0">
+      <Button fx:id="rightAddButton" layoutX="266.0" layoutY="176.0" mnemonicParsing="false" onAction="#removeTaskFromDayTemplate" onMouseEntered="#focusRightButton" onMouseExited="#focusLostRightButton" prefHeight="40.0" prefWidth="40.0" styleClass="button-default-1" AnchorPane.bottomAnchor="180.0" AnchorPane.leftAnchor="235.0">
          <graphic>
             <ImageView fx:id="rightImage" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -33,7 +33,7 @@
                </viewport>
             </ImageView>
          </graphic></Button>
-      <ListView fx:id="compositeTaskListView" layoutX="24.0" layoutY="108.0" prefHeight="200.0" prefWidth="200.0" styleClass="table-view-1" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0" />
+      <ListView fx:id="compositeTaskListView" layoutX="24.0" layoutY="108.0" prefHeight="200.0" prefWidth="200.0" styleClass="list-view-1" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="80.0" />
       <TableView fx:id="compositeTaskTableView" layoutX="325.0" layoutY="101.0" prefHeight="200.0" prefWidth="256.0" styleClass="table-view-1" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="330.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0">
         <columns>
           <TableColumn fx:id="nameTableColumn" prefWidth="75.0" text="Название" />
@@ -64,7 +64,7 @@
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-5" />
          </styleClass></Label>
-      <Button onAction="#saveDayTemplate" fx:id="saveButton" layoutX="521.0" layoutY="361.0" mnemonicParsing="false" text="Сохранить" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">
+      <Button fx:id="saveButton" layoutX="521.0" layoutY="361.0" mnemonicParsing="false" onAction="#saveDayTemplate" text="Сохранить" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">
          <styleClass>
             <String fx:value="button-default-1" />
             <String fx:value="button-1" />
@@ -80,5 +80,10 @@
             <String fx:value="label-text-3" />
          </styleClass>
       </TextField>
+      <Label fx:id="infoLabel" layoutX="25.0" layoutY="316.0" text="Label" AnchorPane.bottomAnchor="70.0" AnchorPane.leftAnchor="20.0">
+         <styleClass>
+            <String fx:value="default-label-text-1" />
+            <String fx:value="label-text-5" />
+         </styleClass></Label>
    </children>
 </AnchorPane>
