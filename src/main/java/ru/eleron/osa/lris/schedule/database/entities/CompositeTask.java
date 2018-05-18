@@ -32,7 +32,7 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
     @Enumerated(EnumType.ORDINAL)
     @Column(name="type")
     private TypeOfCompositeTask type;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<CompositeTask> children;
 
     public CompositeTask()

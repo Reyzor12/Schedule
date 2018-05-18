@@ -27,6 +27,12 @@ public enum ConstantsForElements
     LABEL_FIELD_NAME_DONT_GET("не задано имя"),
 
     /**
+     * Hint
+     * */
+
+    CANT_REMOVE_TASK_IN_DAY("Задача задействована в шаблоне"),
+
+    /**
      * Path to arrow images
      * */
 

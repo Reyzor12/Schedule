@@ -1,16 +1,19 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
+import javafx.beans.binding.BooleanBinding;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
+import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
+import ru.eleron.osa.lris.schedule.utils.cache.ObservableDataMarkers;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
 import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForSchedule;
@@ -40,8 +43,12 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
     @FXML
     private Button chooseTaskButton;
     @FXML
-    private ListView templatesListView;
+    private ListView<CompositeTask> templatesListView;
 
+    @Autowired
+    private ObservableData observableData;
+
+    private ObservableList<CompositeTask> dayTemplateCompositeTaskList;
     private SpinnerForScheduleIF<Image> spinner;
 
     public void initialize()
@@ -53,17 +60,41 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
     }
 
     @Override
-    public void initData() {
+    public void initData()
+    {
+        dayTemplateCompositeTaskList = observableData.getData(ObservableDataMarkers.DAY_TASK_TEMPLATES.getValue());
         logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
     @Override
     public void configureElements() {
         templatesListView.setPlaceholder(new Label(ConstantsForElements.EMPTY_CURRENT_TASK_TABLE.getMessage()));
+
         spinner = new SpinnerForSchedule(Arrays.asList(8.00d,8.30d, 9.00d));
         deviderImageView.setImage(new Image(getClass().getClassLoader().getResource(ConstantsForElements.DEVISION.getMessage()).toString()));
         setSpinnerTime(spinner.getCurrentValue());
         decreaseButton.setDisable(true);
+
+        BooleanBinding isDayTemplateChosen = templatesListView.getSelectionModel().selectedItemProperty().isNull();
+        chooseTaskButton.disableProperty().bind(isDayTemplateChosen);
+
+        templatesListView.setCellFactory(cell -> new ListCell<CompositeTask>()
+        {
+            @Override
+            public void updateItem(CompositeTask task, boolean empty)
+            {
+                super.updateItem(task, empty);
+                if (empty || task == null)
+                {
+                    setText(null);
+                } else {
+                    setText(task.getName() + " " + task.getTime() + "с " + task.getScore() + " очков");
+                }
+            }
+        });
+
+        templatesListView.setItems(dayTemplateCompositeTaskList);
+
         logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
 
@@ -100,6 +131,8 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
     }
     public void chooseTaskButtonClicked(ActionEvent event)
     {
+        final CompositeTask selectedDayTemplate = templatesListView.getSelectionModel().getSelectedItem();
+        
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
     }
 }

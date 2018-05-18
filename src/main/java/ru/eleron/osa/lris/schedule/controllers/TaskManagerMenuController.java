@@ -1,5 +1,6 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,8 +21,10 @@ import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
+import ru.eleron.osa.lris.schedule.utils.message.MessageUtils;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -64,6 +67,8 @@ public class TaskManagerMenuController implements FrameControllerBaseIF
     private TaskCreateUpdateMenuController taskCreateUpdateMenuController;
     @Autowired
     private CompositeTaskDao compositeTaskDao;
+    @Autowired
+    private MessageUtils messageUtils;
 
     private ObservableList<CompositeTask> templatesOfTasks;
 
@@ -89,7 +94,7 @@ public class TaskManagerMenuController implements FrameControllerBaseIF
         nameCompositeTaskTableColumn.setCellValueFactory(item -> new SimpleStringProperty(item.getValue().getName()));
         timeCompositeTaskTableColumn.setCellValueFactory(item -> new SimpleObjectProperty(item.getValue().getTime()));
         scoreCompositeTaskTableColumn.setCellValueFactory(item -> new SimpleObjectProperty(item.getValue().getScore()));
-        BooleanBinding isSelectedItem = compositeTaskTableView.getSelectionModel().selectedItemProperty().isNotNull().not();
+        BooleanBinding isSelectedItem = compositeTaskTableView.getSelectionModel().selectedItemProperty().isNull();
         editCompositeTaskButton.disableProperty().bind(isSelectedItem);
         removeCompositeTaskButton.disableProperty().bind(isSelectedItem);
         compositeTaskTableView.setItems(templatesOfTasks);
@@ -123,11 +128,30 @@ public class TaskManagerMenuController implements FrameControllerBaseIF
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
         final CompositeTask compositeTaskTemp = compositeTaskTableView.getSelectionModel().getSelectedItem();
         CompletableFuture
-                .runAsync(() -> compositeTaskDao.delete(compositeTaskTemp))
+                .supplyAsync(() ->
+                {
+                    List<CompositeTask> taskUsedInDayTemplate = observableData.getData(ObservableDataMarkers.DAY_TASK_TEMPLATES.getValue());
+                    if (taskUsedInDayTemplate.stream().flatMap(task -> task.getChildren().stream()).distinct().anyMatch(task -> task.equals(compositeTaskTemp)))
+                    {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })
                 .exceptionally(e -> {
                     logger.error("Can't delete element " + compositeTaskTemp, e);
-                    return null;
+                    return true;
                 })
-                .thenRunAsync(() -> observableData.getData(ObservableDataMarkers.TASK_TEMPLATES.getValue()).remove(compositeTaskTemp));
+                .thenAcceptAsync(result -> Platform.runLater(() ->
+                    {
+                        if (result)
+                        {
+                            messageUtils.showInfoMessage(ConstantsForElements.CANT_REMOVE_TASK_IN_DAY.getMessage());
+                        } else {
+                            compositeTaskDao.delete(compositeTaskTemp);
+                            observableData.getData(ObservableDataMarkers.TASK_TEMPLATES.getValue()).remove(compositeTaskTemp);
+                        }
+                    })
+                );
     }
 }
