@@ -58,6 +58,15 @@ public class DayCache {
         this.marksForTask = marksForTask;
     }
 
+    public boolean isDefine()
+    {
+        return templateScheduleForDay == null ? false : true;
+    }
+    public boolean actual()
+    {
+        return !isDefine() ? true :      
+    }
+
     @Override
     public String toString() {
         return "DayCache{" +
