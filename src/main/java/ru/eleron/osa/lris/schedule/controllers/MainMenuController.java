@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
@@ -46,6 +47,8 @@ public class MainMenuController implements FrameControllerBaseIF
     private SpringFxmlLoader springFxmlLoader;
     @Autowired
     private FadeNodeControl fadeNodeControl;
+    @Autowired
+    private DayCache dayCache;
 
     public void initialize()
     {
@@ -63,6 +66,7 @@ public class MainMenuController implements FrameControllerBaseIF
 
     public void initData()
     {
+        checkForDayCache();
         logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
@@ -95,8 +99,21 @@ public class MainMenuController implements FrameControllerBaseIF
         fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
     }
 
+    /**
+     * Get information panel
+     * */
+
     public AnchorPane getInformationAnchorPane()
     {
         return informationAnchorPane;
+    }
+
+    /**
+     * Check actual cache for user
+     * */
+
+    private void checkForDayCache()
+    {
+        System.out.println("dayCache = " + dayCache);
     }
 }

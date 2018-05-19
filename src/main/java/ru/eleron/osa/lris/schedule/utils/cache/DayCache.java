@@ -60,11 +60,7 @@ public class DayCache {
 
     public boolean isDefine()
     {
-        return templateScheduleForDay == null ? false : true;
-    }
-    public boolean actual()
-    {
-        return !isDefine() ? true :      
+        return (templateScheduleForDay == null || scheduleForDay == null) ? false : true;
     }
 
     @Override

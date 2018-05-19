@@ -143,4 +143,21 @@ public class SpinnerForSchedule implements SpinnerForScheduleIF<Image> {
         NUMBER_HASH.putIfAbsent(8, new Image(getClass().getClassLoader().getResource(ConstantsForElements.NUMBER_8.getMessage()).toString()));
         NUMBER_HASH.putIfAbsent(9, new Image(getClass().getClassLoader().getResource(ConstantsForElements.NUMBER_9.getMessage()).toString()));
     }
+
+    @Override
+    public Double getCurrentTime()
+    {
+        return currentValue;
+    }
+    @Override
+    public Integer getHour()
+    {
+        return currentValue.intValue();
+    }
+    @Override
+    public Integer getMinute()
+    {
+        Double minuteInDouble = (currentValue - currentValue.intValue())*100;
+        return minuteInDouble.intValue();
+    }
 }

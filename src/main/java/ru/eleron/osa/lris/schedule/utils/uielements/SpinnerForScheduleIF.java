@@ -8,4 +8,7 @@ public interface SpinnerForScheduleIF<T> {
     boolean hasNext();
     boolean hasPrevious();
     List<T> getCurrentValue();
+    Double getCurrentTime();
+    Integer getHour();
+    Integer getMinute();
 }

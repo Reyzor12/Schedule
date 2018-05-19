@@ -25,7 +25,7 @@ public class ProxyCompositeTask extends EntityPrototype
     @Column(name = "start")
     @Temporal(value = TemporalType.TIMESTAMP)
     private Date date;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "entity")
     private CompositeTask compositeTask;
 
