@@ -181,7 +181,9 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
     public void addTaskToDayTemplate(ActionEvent event)
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
-        final CompositeTask compositeTaskTemp = compositeTaskTableView.getSelectionModel().getSelectedItem();
+        final CompositeTask compositeTaskTemp = compositeTaskTableView.getSelectionModel().getSelectedItem().clone();
+        compositeTaskTemp.setType(TypeOfCompositeTask.TASK_IN_DAY);
+        compositeTaskTemp.setId(null);
         compositeTaskListView.getItems().add(compositeTaskTemp);
         timeCompositeTask += compositeTaskTemp.getTime();
         scoreCompositeTask += compositeTaskTemp.getScore();

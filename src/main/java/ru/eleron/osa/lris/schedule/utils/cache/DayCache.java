@@ -5,8 +5,12 @@ import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.StatisticClass;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Cache of User current day
@@ -28,6 +32,7 @@ public class DayCache {
     private CompositeTask templateScheduleForDay;
     private ProxyCompositeTask scheduleForDay;
     private List<StatisticClass> marksForTask;
+    private Map<CompositeTask, WrapInTimeCompositeTask> taskWithTime;
 
     public DayCache()
     {
@@ -46,8 +51,15 @@ public class DayCache {
         return scheduleForDay;
     }
 
-    public void setScheduleForDay(ProxyCompositeTask scheduleForDay) {
+    public void setScheduleForDay(ProxyCompositeTask scheduleForDay)
+    {
         this.scheduleForDay = scheduleForDay;
+        taskWithTime = new HashMap<>();
+        AtomicReference<LocalTime> localTime = new AtomicReference<>(scheduleForDay.getDate().toLocalTime());
+        scheduleForDay.getCompositeTask().getChildren().stream().forEach(compositeTask -> {
+            taskWithTime.put(compositeTask, new WrapInTimeCompositeTask(compositeTask,localTime.get()));
+            localTime.set(localTime.get().plusMinutes(compositeTask.getTime()));
+        });
     }
 
     public List<StatisticClass> getMarksForTask() {
@@ -61,6 +73,14 @@ public class DayCache {
     public boolean isDefine()
     {
         return (templateScheduleForDay == null || scheduleForDay == null) ? false : true;
+    }
+
+    public Map<CompositeTask, WrapInTimeCompositeTask> getTaskWithTime() {
+        return taskWithTime;
+    }
+
+    public void setTaskWithTime(Map<CompositeTask, WrapInTimeCompositeTask> taskWithTime) {
+        this.taskWithTime = taskWithTime;
     }
 
     @Override

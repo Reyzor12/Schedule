@@ -15,7 +15,8 @@ public enum TypeOfCompositeTask
     TASK(0),
     DAY(1),
     WEEK(2),
-    MONTH(3);
+    MONTH(3),
+    TASK_IN_DAY(4);
 
     private Integer info;
 
