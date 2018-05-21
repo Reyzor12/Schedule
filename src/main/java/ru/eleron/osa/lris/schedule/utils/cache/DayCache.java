@@ -64,7 +64,7 @@ public class DayCache {
     }
     public boolean actual()
     {
-        return !isDefine() ? true :      
+        return !isDefine() ? true :
     }
 
     @Override
