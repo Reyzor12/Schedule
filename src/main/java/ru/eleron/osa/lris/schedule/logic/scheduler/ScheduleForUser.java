@@ -34,6 +34,8 @@ public class ScheduleForUser implements Runnable
     @Autowired
     private TaskLoad task;
 
+    private LocalTime localTime;
+
     @Override
     public void run()
     {
@@ -47,6 +49,7 @@ public class ScheduleForUser implements Runnable
             return;
         } else
         {
+            localTime = LocalTime.now();
              registerSchedule();
         }
     }
@@ -72,8 +75,8 @@ public class ScheduleForUser implements Runnable
     {
         System.out.println("schedule for " + compositeTask + " registered");
         //scheduler.schedule(new TaskLoad(compositeTask), Date.from(timeCompositeTask.getStart().atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
-        LocalTime localTime = LocalTime.now().plusSeconds(10);
-
+        localTime = localTime.plusSeconds(5);
+        System.out.println(localTime);
         task.setCompositeTask(compositeTask);
         scheduler.schedule(task, Date.from(localTime.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
     }

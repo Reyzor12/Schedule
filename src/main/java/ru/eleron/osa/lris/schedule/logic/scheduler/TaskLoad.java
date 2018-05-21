@@ -39,9 +39,8 @@ public class TaskLoad implements Runnable
     @Override
     public void run()
     {
-        Platform.runLater(() -> {
-            System.out.println("COMPOSITE TASK += " + compositeTask);
-            //sceneLoader.loadScene(ScenesInApplication.START_TASK.getUrl(), compositeTask, new Stage());
+        Platform.runLater(() ->
+        {
             sceneLoader.loadScene(ScenesInApplication.START_TASK.getUrl(), compositeTask, new Stage());
         });
     }
