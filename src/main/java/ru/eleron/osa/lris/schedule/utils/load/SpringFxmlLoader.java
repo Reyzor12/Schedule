@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.MainApp;
+import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseDelegeteIF;
 
 import java.io.IOException;
 
@@ -35,6 +36,24 @@ public class SpringFxmlLoader
         try
         {
             return loader.load();
+        } catch (IOException exception)
+        {
+            logger.error("scene " + url +  " don't load", exception);
+        }
+        return null;
+    }
+
+    public Object load(String url, Object object)
+    {
+        logger.info("try load scene " + url);
+        FXMLLoader loader = new FXMLLoader();
+        loader.setControllerFactory(MainApp.APPLICATION_CONTEXT::getBean);
+        loader.setLocation(getClass().getClassLoader().getResource(url));
+        try
+        {
+            Object result = loader.load();
+            ((FrameControllerBaseDelegeteIF) loader.getController()).delegete(object);
+            return result;
         } catch (IOException exception)
         {
             logger.error("scene " + url +  " don't load", exception);

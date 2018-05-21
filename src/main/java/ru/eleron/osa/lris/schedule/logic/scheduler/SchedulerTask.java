@@ -1,9 +1,10 @@
 package ru.eleron.osa.lris.schedule.logic.scheduler;
 
-import org.springframework.data.repository.query.Param;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
-import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
+import ru.eleron.osa.lris.schedule.utils.storage.ConstantsSittings;
 
 /**
  * Start schedule for list of tasks
@@ -15,24 +16,12 @@ import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 @Component
 public class SchedulerTask
 {
-    private String start;
-
-    public SchedulerTask()
+    @Bean
+    public ThreadPoolTaskScheduler threadPoolTaskScheduler()
     {
-
-    }
-
-    public String getStart() {
-        return start;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
-
-    @Scheduled(cron = "10 * * * * *")
-    public void runSchedule()
-    {
-        System.out.println("Composite Task = " + 1);
+        ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+        threadPoolTaskScheduler.setPoolSize(ConstantsSittings.SCHEDULE_POOL_SIZE.getIntegerConstant());
+        threadPoolTaskScheduler.setThreadNamePrefix(ConstantsSittings.SCHEDULE_POOL_NAME_PREFIX.getStringConstant());
+        return threadPoolTaskScheduler;
     }
 }

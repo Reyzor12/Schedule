@@ -44,5 +44,6 @@ public class MainApp extends Application
     public void stop()
     {
         APPLICATION_CONTEXT.stop();
+        System.exit(0);
     }
 }

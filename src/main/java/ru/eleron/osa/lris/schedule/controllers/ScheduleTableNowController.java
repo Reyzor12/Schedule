@@ -14,13 +14,16 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
+import ru.eleron.osa.lris.schedule.logic.scheduler.ScheduleForUser;
 import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.cache.WrapInTimeCompositeTask;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
+import ru.eleron.osa.lris.schedule.utils.message.MessageUtils;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
 
 import java.time.LocalDate;
@@ -57,6 +60,12 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
     private DayCache dayCache;
     @Autowired
     private ProxyCompositeTaskDao proxyCompositeTaskDao;
+    @Autowired
+    private MessageUtils messageUtils;
+    @Autowired
+    private ScheduleForUser scheduleForUser;
+    @Autowired
+    private ThreadPoolTaskScheduler taskScheduler;
 
     private ObservableList<CompositeTask> compositeTaskInScheduleForToday;
     private Map<CompositeTask, WrapInTimeCompositeTask> wrapInTimeCompositeTaskMap;
@@ -108,16 +117,12 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
             dayCache.setScheduleForDay(proxyCompositeTaskForCurrentDay);
             compositeTaskInScheduleForToday.setAll(dayCache.getTemplateScheduleForDay().getChildren());
             wrapInTimeCompositeTaskMap.putAll(dayCache.getTaskWithTime());
-            if (!wrapInTimeCompositeTaskMap.get(dayCache.getTemplateScheduleForDay().getChildren().get(dayCache.getTemplateScheduleForDay().getChildren().size()-1)).getStart().isBefore(LocalTime.now()))
+            if (!wrapInTimeCompositeTaskMap.get(dayCache.getTemplateScheduleForDay().getChildren().get(dayCache.getTemplateScheduleForDay().getChildren().size()-1)).getEnd().isAfter(LocalTime.now()))
             {
-                TaskScheduler t = new ConcurrentTaskScheduler(Executors.newSingleThreadScheduledExecutor());
-
-                t.schedule(() -> {
-                    System.out.println("HELLO WORLD");
-                },new Date());
-
+                taskScheduler.schedule(scheduleForUser, new Date());
+            } else {
+                messageUtils.showInfoMessage(ConstantsForElements.TASK_DONE_FOR_TODAY.getMessage());
             }
-
         }
     }
 }

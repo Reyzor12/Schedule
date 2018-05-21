@@ -88,16 +88,14 @@ public class ProxyCompositeTask extends EntityPrototype
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         ProxyCompositeTask that = (ProxyCompositeTask) o;
 
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        return compositeTask != null ? compositeTask.equals(that.compositeTask) : that.compositeTask == null;
+        return date != null ? date.equals(that.date) : that.date == null;
     }
 
     @Override

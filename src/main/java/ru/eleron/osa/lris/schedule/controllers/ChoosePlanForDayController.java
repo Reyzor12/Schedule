@@ -12,10 +12,13 @@ import javafx.scene.image.ImageView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
+import ru.eleron.osa.lris.schedule.logic.scheduler.ScheduleForUser;
+import ru.eleron.osa.lris.schedule.logic.scheduler.SchedulerTask;
 import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableDataMarkers;
@@ -30,6 +33,7 @@ import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForScheduleIF;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -72,6 +76,10 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
     private SpringFxmlLoader springFxmlLoader;
     @Autowired
     private ProxyCompositeTaskDao proxyCompositeTaskDao;
+    @Autowired
+    private ThreadPoolTaskScheduler schedulerTask;
+    @Autowired
+    private ScheduleForUser scheduleForUser;
 
     private ObservableList<CompositeTask> dayTemplateCompositeTaskList;
     private SpinnerForScheduleIF<Image> spinner;
@@ -197,6 +205,7 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
                     {
                         dayCache.setTemplateScheduleForDay(selectedDayTemplate);
                         dayCache.setScheduleForDay(createdProxyCompositeTask);
+                        schedulerTask.schedule(scheduleForUser, Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
                         fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
                     } else {
                         messageUtils.showInfoMessage("Не удалось сохранить проект");

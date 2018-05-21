@@ -112,13 +112,44 @@ public class SceneLoader implements BaseSceneLoader
     }
 
     @Override
-    public void loadScene(String url, Stage stage) {
+    public void loadScene(String url, Stage stage)
+    {
         if (stage != null && url != null)
         {
             sceneCache.put(url, stage);
             loadScene(url);
         }
     }
+
+    @Override
+    public void loadScene(String url, Object object)
+    {
+        Stage stage = sceneCache.get(url);
+        if (stage == null)
+        {
+            logger.info("load scene absent in cache " + url);
+            stage = getNewDefaultStage(url, object);
+            sceneCache.put(url, stage);
+            stage.show();
+        } else {
+            if (!stage.isShowing())
+            {
+                logger.info("load scene from cache " + url);
+                stage.show();
+            }
+        }
+    }
+
+    @Override
+    public void loadScene(String url, Object object, Stage stage)
+    {
+        if (stage != null && url != null)
+        {
+            sceneCache.put(url, setUpStage(url, object, stage));
+            loadScene(url, object);
+        }
+    }
+
 
     /**
      * utilities
@@ -164,12 +195,47 @@ public class SceneLoader implements BaseSceneLoader
         return stage;
     }
 
+    private Stage getNewDefaultStage(String url, Object object)
+    {
+        final Stage stage = createStageWithoutSittingsWithDelegete(url, object);
+        initDefaultStage(stage);
+        return stage;
+    }
+
+    private Stage getNewStage(String url, Object object, Integer minWidth, Integer minHeight, Integer maxWidth, Integer maxHeight, Integer width, Integer height)
+    {
+        final Stage stage = createStageWithoutSittingsWithDelegete(url, object);
+        initStage(stage, minWidth, minHeight, maxWidth, maxHeight, width, height);
+        return stage;
+    }
+
     private Stage createStageWithoutSittings(String url)
     {
         Parent root = (Parent) springFxmlLoader.load(url);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
+        return stage;
+    }
+    private Stage createStageWithoutSittingsWithDelegete(String url, Object object)
+    {
+        Parent root = (Parent) springFxmlLoader.load(url, object);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        return stage;
+    }
+
+    private Stage setUpStage(String url, Stage stage)
+    {
+        Parent root = (Parent) springFxmlLoader.load(url);
+        stage.setScene(new Scene(root));
+        return stage;
+    }
+
+    private Stage setUpStage(String url, Object object, Stage stage)
+    {
+        stage.setScene(new Scene((Parent) springFxmlLoader.load(url, object)));
         return stage;
     }
 }

@@ -16,4 +16,6 @@ public interface BaseSceneLoader
     void loadScene(String url);
     void loadScene(String url, Integer minWidth, Integer minHeight, Integer maxWidth, Integer maxHeight, Integer width, Integer height);
     void loadScene(String url, Stage stage);
+    void loadScene(String url, Object object);
+    void loadScene(String url, Object object, Stage stage);
 }

@@ -32,7 +32,14 @@ public enum ConstantsSittings
      * */
 
     APPLICATION_INITIAL_TASK_TIME_DEFAULT(8.30d),
-    APPLICATION_INITIAL_TASK_TIME(Arrays.asList(8.30d, 9d));
+    APPLICATION_INITIAL_TASK_TIME(Arrays.asList(8.30d, 9d)),
+
+    /**
+     * Schedule
+     * */
+
+    SCHEDULE_POOL_SIZE(20),
+    SCHEDULE_POOL_NAME_PREFIX("TASK FOR TODAY ");
 
     private String stringConstant;
     private Integer integerConstant;

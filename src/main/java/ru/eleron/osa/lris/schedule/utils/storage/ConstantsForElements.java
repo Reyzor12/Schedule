@@ -31,6 +31,7 @@ public enum ConstantsForElements
      * */
 
     CANT_REMOVE_TASK_IN_DAY("Задача задействована в шаблоне"),
+    TASK_DONE_FOR_TODAY("Время всех заданий прошло"),
 
     /**
      * Path to arrow images
