@@ -11,11 +11,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
+import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
+import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.BaseSceneLoader;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
+
+import java.time.LocalDate;
 
 /**
  * Class controller for main menu of application
@@ -95,8 +100,13 @@ public class MainMenuController implements FrameControllerBaseIF
         fadeNodeControl.changeSceneWithFade(informationAnchorPane, (Node) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
     }
 
+    /**
+     * Get information panel
+     * */
+
     public AnchorPane getInformationAnchorPane()
     {
         return informationAnchorPane;
     }
+
 }

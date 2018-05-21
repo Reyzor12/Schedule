@@ -28,6 +28,7 @@ import ru.eleron.osa.lris.schedule.utils.storage.ConstantsForElements;
 import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForSchedule;
 import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForScheduleIF;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
@@ -112,7 +113,7 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
                 {
                     setText(null);
                 } else {
-                    setText(task.getName() + " " + task.getTime() + "с " + task.getScore() + " очков");
+                    setText(task.getName() + " " + task.getTime() + "м " + task.getScore() + " очков");
                 }
             }
         });
@@ -176,7 +177,7 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
         final ProxyCompositeTask createdProxyCompositeTask = new ProxyCompositeTask();
 
         createdProxyCompositeTask.setName(selectedDayTemplate.getName());
-        createdProxyCompositeTask.setDate(LocalDateTime.now());
+        createdProxyCompositeTask.setDate(LocalDate.now().atTime(spinner.getHour(), spinner.getMinute()));
         createdProxyCompositeTask.setCompositeTask(selectedDayTemplate);
 
         CompletableFuture

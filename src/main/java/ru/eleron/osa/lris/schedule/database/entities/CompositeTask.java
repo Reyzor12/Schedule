@@ -32,7 +32,7 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
     @Enumerated(EnumType.ORDINAL)
     @Column(name="type")
     private TypeOfCompositeTask type;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL )
     private List<CompositeTask> children;
 
     public CompositeTask()
@@ -72,7 +72,7 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
 
     public boolean isTask()
     {
-        return type.equals(TypeOfCompositeTask.TASK);
+        return type.equals(TypeOfCompositeTask.TASK) || type.equals(TypeOfCompositeTask.TASK_IN_DAY);
     }
 
     public List<CompositeTask> getChildren()
@@ -208,7 +208,8 @@ public class CompositeTask extends EntityPrototype implements ClonnableObject<Co
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CompositeTask that = (CompositeTask) o;
-        return Objects.equals(name, that.name) &&
+        return  Objects.equals(getId(), that.getId()) &&
+                Objects.equals(name, that.name) &&
                 Objects.equals(time, that.time) &&
                 Objects.equals(type, that.type) &&
                 Objects.equals(score, that.score);
