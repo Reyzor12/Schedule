@@ -205,7 +205,6 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
                     {
                         dayCache.setTemplateScheduleForDay(selectedDayTemplate);
                         dayCache.setScheduleForDay(createdProxyCompositeTask);
-                        schedulerTask.schedule(scheduleForUser, Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
                         fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
                     } else {
                         messageUtils.showInfoMessage("Не удалось сохранить проект");

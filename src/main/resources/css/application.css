@@ -153,6 +153,10 @@
     -fx-font: 18pt "Courier New";
     -fx-font-weight: bold;
 }
+.button-3
+{
+    -fx-font: 14pt "Courier New";
+}
 
 .button-default-1:pressed
 {

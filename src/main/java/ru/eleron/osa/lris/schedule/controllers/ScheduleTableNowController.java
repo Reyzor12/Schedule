@@ -17,6 +17,7 @@ import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
+import ru.eleron.osa.lris.schedule.database.dao.StatisticClassDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
 import ru.eleron.osa.lris.schedule.logic.scheduler.ScheduleForUser;
@@ -66,6 +67,8 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
     private ScheduleForUser scheduleForUser;
     @Autowired
     private ThreadPoolTaskScheduler taskScheduler;
+    @Autowired
+    private StatisticClassDao statisticClassDao;
 
     private ObservableList<CompositeTask> compositeTaskInScheduleForToday;
     private Map<CompositeTask, WrapInTimeCompositeTask> wrapInTimeCompositeTaskMap;
@@ -111,15 +114,20 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
     {
         final LocalDate localDate = LocalDate.now();
         final ProxyCompositeTask proxyCompositeTaskForCurrentDay = proxyCompositeTaskDao.findByDate(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
-        if (proxyCompositeTaskForCurrentDay != null)
+        if (proxyCompositeTaskForCurrentDay != null && !dayCache.isDefine())
         {
             dayCache.setTemplateScheduleForDay(proxyCompositeTaskForCurrentDay.getCompositeTask());
             dayCache.setScheduleForDay(proxyCompositeTaskForCurrentDay);
+            dayCache.setMarksForTask(statisticClassDao.performedTask(proxyCompositeTaskForCurrentDay));
             compositeTaskInScheduleForToday.setAll(dayCache.getTemplateScheduleForDay().getChildren());
             wrapInTimeCompositeTaskMap.putAll(dayCache.getTaskWithTime());
-            if (!wrapInTimeCompositeTaskMap.get(dayCache.getTemplateScheduleForDay().getChildren().get(dayCache.getTemplateScheduleForDay().getChildren().size()-1)).getEnd().isAfter(LocalTime.now()))
+            if (wrapInTimeCompositeTaskMap.get(dayCache.getTemplateScheduleForDay().getChildren().get(dayCache.getTemplateScheduleForDay().getChildren().size()-1)).getEnd().isAfter(LocalTime.now()))
             {
-                taskScheduler.schedule(scheduleForUser, new Date());
+                if (!dayCache.getTaskInSchedule())
+                {
+                    taskScheduler.schedule(scheduleForUser, new Date());
+                    dayCache.setTaskInSchedule(true);
+                }
             } else {
                 messageUtils.showInfoMessage(ConstantsForElements.TASK_DONE_FOR_TODAY.getMessage());
             }

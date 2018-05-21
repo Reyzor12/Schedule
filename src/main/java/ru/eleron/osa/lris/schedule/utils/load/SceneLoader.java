@@ -150,6 +150,11 @@ public class SceneLoader implements BaseSceneLoader
         }
     }
 
+    @Override
+    public void loadSceneWithoutCache(String url, Object object, Stage stage) {
+        setUpStage(url, object, stage).show();
+    }
+
 
     /**
      * utilities

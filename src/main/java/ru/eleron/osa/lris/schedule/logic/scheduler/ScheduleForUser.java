@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.MainApp;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.cache.WrapInTimeCompositeTask;
@@ -13,6 +14,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Runnable class, description of schedule for user
@@ -31,10 +34,9 @@ public class ScheduleForUser implements Runnable
     private DayCache dayCache;
     @Autowired
     private ThreadPoolTaskScheduler scheduler;
-    @Autowired
-    private TaskLoad task;
 
     private LocalTime localTime;
+    private List<CompositeTask> doneCompositeTask;
 
     @Override
     public void run()
@@ -50,7 +52,8 @@ public class ScheduleForUser implements Runnable
         } else
         {
             localTime = LocalTime.now();
-             registerSchedule();
+            doneCompositeTask = dayCache.getMarksForTask().stream().map(statisticClass -> statisticClass.getCompositeKey().getCompositeTask()).collect(Collectors.toList());
+            registerSchedule();
         }
     }
 
@@ -74,9 +77,11 @@ public class ScheduleForUser implements Runnable
     private void registerTask(CompositeTask compositeTask, WrapInTimeCompositeTask timeCompositeTask)
     {
         System.out.println("schedule for " + compositeTask + " registered");
+        if (doneCompositeTask.contains(compositeTask)) return;
+        System.out.println("schedule for " + compositeTask + " registered well");
         //scheduler.schedule(new TaskLoad(compositeTask), Date.from(timeCompositeTask.getStart().atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
         localTime = localTime.plusSeconds(5);
-        System.out.println(localTime);
+        TaskLoad task = (TaskLoad) MainApp.APPLICATION_CONTEXT.getBean("taskLoad");
         task.setCompositeTask(compositeTask);
         scheduler.schedule(task, Date.from(localTime.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
     }

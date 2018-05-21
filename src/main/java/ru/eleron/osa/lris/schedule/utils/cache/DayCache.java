@@ -33,10 +33,12 @@ public class DayCache {
     private ProxyCompositeTask scheduleForDay;
     private List<StatisticClass> marksForTask;
     private Map<CompositeTask, WrapInTimeCompositeTask> taskWithTime;
+    private Boolean isTaskInSchedule;
 
     public DayCache()
     {
         this.marksForTask = new ArrayList<>();
+        this.isTaskInSchedule = false;
     }
 
     public CompositeTask getTemplateScheduleForDay() {
@@ -49,6 +51,14 @@ public class DayCache {
 
     public ProxyCompositeTask getScheduleForDay() {
         return scheduleForDay;
+    }
+
+    public Boolean getTaskInSchedule() {
+        return isTaskInSchedule;
+    }
+
+    public void setTaskInSchedule(Boolean taskInSchedule) {
+        isTaskInSchedule = taskInSchedule;
     }
 
     public void setScheduleForDay(ProxyCompositeTask scheduleForDay)

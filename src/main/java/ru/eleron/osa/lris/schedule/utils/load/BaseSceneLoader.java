@@ -18,4 +18,5 @@ public interface BaseSceneLoader
     void loadScene(String url, Stage stage);
     void loadScene(String url, Object object);
     void loadScene(String url, Object object, Stage stage);
+    void loadSceneWithoutCache(String url, Object object, Stage stage);
 }
