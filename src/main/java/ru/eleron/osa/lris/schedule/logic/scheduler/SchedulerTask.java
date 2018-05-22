@@ -1,7 +1,6 @@
 package ru.eleron.osa.lris.schedule.logic.scheduler;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.utils.storage.ConstantsSittings;

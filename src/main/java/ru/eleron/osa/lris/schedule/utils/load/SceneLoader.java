@@ -4,6 +4,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,8 @@ public class SceneLoader implements BaseSceneLoader
     private SpringFxmlLoader springFxmlLoader;
 
     private Map<String, Stage> sceneCache;
+    private double xOffset = 0;
+    private double yOffset = 0;
 
     public SceneLoader()
     {
@@ -240,7 +243,19 @@ public class SceneLoader implements BaseSceneLoader
 
     private Stage setUpStage(String url, Object object, Stage stage)
     {
-        stage.setScene(new Scene((Parent) springFxmlLoader.load(url, object)));
+        Parent root = (Parent) springFxmlLoader.load(url, object);
+        root.setOnMousePressed(event ->
+        {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        root.setOnMouseDragged(event ->
+        {
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
+        });
+        stage.setScene(new Scene(root));
+        stage.initStyle(StageStyle.UNDECORATED);
         return stage;
     }
 }

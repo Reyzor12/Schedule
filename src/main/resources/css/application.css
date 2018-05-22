@@ -383,3 +383,29 @@
     -fx-background-color: #4c664c;
     -fx-text-fill: #00E020;
 }
+.default-choice-box
+{
+    -fx-background-color: #00E020;
+    -fx-mark-color: black;
+}
+.default-choice-box > .label
+{
+    -fx-text-fill: black;
+    -fx-font: 14pt "Courier New";
+}
+.default-choice-box .context-menu
+{
+    -fx-background-color: #00E020;
+}
+.default-choice-box .menu-item:focused
+{
+    -fx-background-color: #4c664c;
+}
+.default-choice-box .menu-item > .label
+{
+    -fx-text-fill: black;
+}
+.default-choice-box .menu-item:focused > .label
+{
+    -fx-text-fill: black;
+}

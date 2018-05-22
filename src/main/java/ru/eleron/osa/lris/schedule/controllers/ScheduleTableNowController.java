@@ -12,8 +12,6 @@ import javafx.scene.control.Tooltip;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
@@ -32,7 +30,6 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executors;
 
 /**
  * Controller for inner frame with table data of schedule
@@ -72,6 +69,7 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
 
     private ObservableList<CompositeTask> compositeTaskInScheduleForToday;
     private Map<CompositeTask, WrapInTimeCompositeTask> wrapInTimeCompositeTaskMap;
+    private ProxyCompositeTask proxyCompositeTaskForCurrentDay;
 
     public void initialize()
     {
@@ -112,16 +110,12 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
 
     private void checkForDayCache()
     {
-        final LocalDate localDate = LocalDate.now();
-        final ProxyCompositeTask proxyCompositeTaskForCurrentDay = proxyCompositeTaskDao.findByDate(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
-        if (proxyCompositeTaskForCurrentDay != null && !dayCache.isDefine())
+        if (isDayCacheEnable())
         {
-            dayCache.setTemplateScheduleForDay(proxyCompositeTaskForCurrentDay.getCompositeTask());
-            dayCache.setScheduleForDay(proxyCompositeTaskForCurrentDay);
-            dayCache.setMarksForTask(statisticClassDao.performedTask(proxyCompositeTaskForCurrentDay));
+            setUpDayCache();
             compositeTaskInScheduleForToday.setAll(dayCache.getTemplateScheduleForDay().getChildren());
             wrapInTimeCompositeTaskMap.putAll(dayCache.getTaskWithTime());
-            if (wrapInTimeCompositeTaskMap.get(dayCache.getTemplateScheduleForDay().getChildren().get(dayCache.getTemplateScheduleForDay().getChildren().size()-1)).getEnd().isAfter(LocalTime.now()))
+            if (isLastTaskTimeBeforeCurrentTime())
             {
                 if (!dayCache.getTaskInSchedule())
                 {
@@ -131,6 +125,27 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
             } else {
                 messageUtils.showInfoMessage(ConstantsForElements.TASK_DONE_FOR_TODAY.getMessage());
             }
+        } else if (dayCache.isDefine())
+        {
+            compositeTaskInScheduleForToday.setAll(dayCache.getTemplateScheduleForDay().getChildren());
+            wrapInTimeCompositeTaskMap.putAll(dayCache.getTaskWithTime());
         }
+    }
+
+    private boolean isDayCacheEnable()
+    {
+        final LocalDate localDate = LocalDate.now();
+        this.proxyCompositeTaskForCurrentDay = proxyCompositeTaskDao.findByDate(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
+        return proxyCompositeTaskForCurrentDay != null && !dayCache.isDefine();
+    }
+    private void setUpDayCache()
+    {
+        dayCache.setTemplateScheduleForDay(proxyCompositeTaskForCurrentDay.getCompositeTask());
+        dayCache.setScheduleForDay(proxyCompositeTaskForCurrentDay);
+        dayCache.setMarksForTask(statisticClassDao.performedTask(proxyCompositeTaskForCurrentDay));
+    }
+    private boolean isLastTaskTimeBeforeCurrentTime()
+    {
+        return wrapInTimeCompositeTaskMap.get(dayCache.getTemplateScheduleForDay().getChildren().get(dayCache.getTemplateScheduleForDay().getChildren().size()-1)).getEnd().isAfter(LocalTime.now());
     }
 }

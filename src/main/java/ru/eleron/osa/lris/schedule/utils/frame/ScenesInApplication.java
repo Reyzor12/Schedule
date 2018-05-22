@@ -18,7 +18,8 @@ public enum ScenesInApplication
     TASK_MANAGER_MENU("frame/TaskManagerMenu.fxml"),
     TASK_CREATE_UPDATE_MENU("frame/TaskCreateUpdateMenu.fxml"),
     CHOOSE_PLAN_FOR_DAY("frame/ChoosePlanForDay.fxml"),
-    START_TASK("frame/StartTask.fxml");
+    START_TASK("frame/StartTask.fxml"),
+    END_TASK("frame/EndTask.fxml");
 
     private String url;
 

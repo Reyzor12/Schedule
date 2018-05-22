@@ -11,7 +11,6 @@ import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.cache.WrapInTimeCompositeTask;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +34,7 @@ public class ScheduleForUser implements Runnable
     @Autowired
     private ThreadPoolTaskScheduler scheduler;
 
-    private LocalTime localTime;
+    //private LocalTime localTime;
     private List<CompositeTask> doneCompositeTask;
 
     @Override
@@ -51,7 +50,7 @@ public class ScheduleForUser implements Runnable
             return;
         } else
         {
-            localTime = LocalTime.now();
+            //localTime = LocalTime.now();
             doneCompositeTask = dayCache.getMarksForTask().stream().map(statisticClass -> statisticClass.getCompositeKey().getCompositeTask()).collect(Collectors.toList());
             registerSchedule();
         }
@@ -76,13 +75,11 @@ public class ScheduleForUser implements Runnable
      * */
     private void registerTask(CompositeTask compositeTask, WrapInTimeCompositeTask timeCompositeTask)
     {
-        System.out.println("schedule for " + compositeTask + " registered");
         if (doneCompositeTask.contains(compositeTask)) return;
-        System.out.println("schedule for " + compositeTask + " registered well");
-        //scheduler.schedule(new TaskLoad(compositeTask), Date.from(timeCompositeTask.getStart().atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
-        localTime = localTime.plusSeconds(5);
+        //localTime = localTime.plusSeconds(5);
         TaskLoad task = (TaskLoad) MainApp.APPLICATION_CONTEXT.getBean("taskLoad");
         task.setCompositeTask(compositeTask);
-        scheduler.schedule(task, Date.from(localTime.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
+        //scheduler.schedule(task, Date.from(localTime.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
+        scheduler.schedule(task, Date.from(timeCompositeTask.getStart().atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
     }
 }

@@ -34,4 +34,15 @@ public enum MarkForTask
     {
         return mark;
     }
+    public static MarkForTask getMark(Float mark)
+    {
+        switch(Float.floatToIntBits(mark*100)) {
+            case 100: return MARK_A;
+            case 75: return MARK_B;
+            case 50: return MARK_C;
+            case 25: return MARK_D;
+            case 0: return MARK_F;
+            default: return null;
+        }
+    }
 }

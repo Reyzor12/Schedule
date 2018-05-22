@@ -18,7 +18,6 @@ import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
 import ru.eleron.osa.lris.schedule.logic.scheduler.ScheduleForUser;
-import ru.eleron.osa.lris.schedule.logic.scheduler.SchedulerTask;
 import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableDataMarkers;
@@ -32,10 +31,7 @@ import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForSchedule;
 import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForScheduleIF;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 

@@ -3,7 +3,6 @@ package ru.eleron.osa.lris.schedule.utils.cache;
 import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 
