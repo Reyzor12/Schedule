@@ -11,10 +11,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.database.entities.StatisticClass;
+import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Controller for view statistics of tasks
@@ -51,6 +56,11 @@ public class StatisticMenuController implements FrameControllerBaseIF
     private FadeNodeControl fadeNodeControl;
     @Autowired
     private SpringFxmlLoader springFxmlLoader;
+    @Autowired
+    private DayCache dayCache;
+
+    private List<StatisticClass> weekStatistic;
+    private List<StatisticClass> monthStatistic;
 
     public void initialize()
     {
@@ -83,10 +93,16 @@ public class StatisticMenuController implements FrameControllerBaseIF
     public void showStatisticForWeek(ActionEvent event)
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        weekButton.setStyle("-fx-background-color: #00E020;-fx-text-fill: black;");
+        monthButton.setStyle("-fx-background-color: transparent;-fx-text-fill: #00E020;");
+        displayWeekStatistic();
     }
     public void showStatisticForMonth(ActionEvent event)
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        monthButton.setStyle("-fx-background-color: #00E020;-fx-text-fill: black;");
+        weekButton.setStyle("-fx-background-color: transparent;-fx-text-fill: #00E020;");
+        displayMonthStatistic();
     }
     public void clearAllStatistic(ActionEvent event)
     {
@@ -96,5 +112,46 @@ public class StatisticMenuController implements FrameControllerBaseIF
     {
         fadeNodeControl.changeSceneWithFade(statisticAnchorPane, (Node)springFxmlLoader.load(ScenesInApplication.STATISTIC_GRAPH.getUrl()));
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+    }
+
+    private boolean isLoadedWeekStatistic()
+    {
+        return weekStatistic != null;
+    }
+    private boolean isLoadedMonthStatistic()
+    {
+        return monthStatistic != null;
+    }
+    private void displayWeekStatistic()
+    {
+        if (!isLoadedWeekStatistic()) weekStatistic = dayCache.getWeekStatistic(LocalDateTime.now());
+        countTaskDoneLabel.setText(String.valueOf(weekStatistic.size()));
+        countTaskFailLabel
+                .setText(
+                        String.valueOf(
+                                weekStatistic
+                                        .stream()
+                                        .map(statisticClass -> statisticClass.getCompositeKey().getProxyCompositeTask())
+                                        .distinct()
+                                        .flatMap(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getChildren().stream())
+                                        .count() - weekStatistic.size()
+                        )
+                );
+    }
+    private void displayMonthStatistic()
+    {
+        if (!isLoadedMonthStatistic()) monthStatistic = dayCache.getMonthStatistic(LocalDateTime.now());
+        countTaskDoneLabel.setText(String.valueOf(monthStatistic.size()));
+        countTaskFailLabel
+                .setText(
+                        String.valueOf(
+                                monthStatistic
+                                        .stream()
+                                        .map(statisticClass -> statisticClass.getCompositeKey().getProxyCompositeTask())
+                                        .distinct()
+                                        .flatMap(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getChildren().stream())
+                                        .count() - monthStatistic.size()
+                        )
+                );
     }
 }
