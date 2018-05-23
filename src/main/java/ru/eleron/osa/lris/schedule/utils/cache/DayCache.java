@@ -43,6 +43,8 @@ public class DayCache {
 
     @Autowired
     private StatisticClassDao statisticClassDao;
+    @Autowired
+    private ProxyCompositeTaskDao proxyCompositeTaskDao;
 
     public DayCache()
     {
@@ -124,6 +126,28 @@ public class DayCache {
                 );
         return monthStatistic;
     }
+    public List<ProxyCompositeTask> getWeekProxyCompositeTasks(LocalDateTime endDate)
+    {
+        if (hasWeekProxyCompositeTask()) return weekProxyCompositeTasks;
+        final LocalDateTime startDate = endDate.minusWeeks(1);
+        weekProxyCompositeTasks = proxyCompositeTaskDao.findFromDateToDate
+                (
+                        Date.from(startDate.atZone(ZoneId.systemDefault()).toInstant()),
+                        Date.from(endDate.atZone(ZoneId.systemDefault()).toInstant())
+                );
+        return weekProxyCompositeTasks;
+    }
+    public List<ProxyCompositeTask> getMonthProxyCompositeTasks(LocalDateTime endDate)
+    {
+        if (hasMonthProxyCompositeTask()) return monthProxyCompositeTasks;
+        final LocalDateTime startDate = endDate.minusMonths(1);
+        monthProxyCompositeTasks = proxyCompositeTaskDao.findFromDateToDate
+                (
+                        Date.from(startDate.atZone(ZoneId.systemDefault()).toInstant()),
+                        Date.from(endDate.atZone(ZoneId.systemDefault()).toInstant())
+                        );
+        return monthProxyCompositeTasks;
+    }
 
     public boolean hasWeekStatistic()
     {
@@ -132,6 +156,14 @@ public class DayCache {
     public boolean hasMonthStatistic()
     {
         return monthStatistic != null;
+    }
+    public boolean hasWeekProxyCompositeTask()
+    {
+        return weekProxyCompositeTasks != null;
+    }
+    public boolean hasMonthProxyCompositeTask()
+    {
+        return monthProxyCompositeTasks != null;
     }
 
     @Override

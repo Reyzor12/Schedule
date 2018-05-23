@@ -11,6 +11,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.database.entities.MarkForTask;
 import ru.eleron.osa.lris.schedule.database.entities.StatisticClass;
 import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
@@ -19,7 +20,9 @@ import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Controller for view statistics of tasks
@@ -32,6 +35,7 @@ import java.util.List;
 public class StatisticMenuController implements FrameControllerBaseIF
 {
     private static final Logger logger = LogManager.getLogger(StatisticMenuController.class);
+    private static final String DEFAULT_VALUE = "";
 
     @FXML
     private Button weekButton;
@@ -61,18 +65,35 @@ public class StatisticMenuController implements FrameControllerBaseIF
 
     private List<StatisticClass> weekStatistic;
     private List<StatisticClass> monthStatistic;
+    private String passTaskWeek;
+    private String missTaskWeek;
+    private String scoreReceivedWeek;
+    private String scoreLostWeek;
+    private String passTaskMonth;
+    private String missTaskMonth;
+    private String scoreReceivedMonth;
+    private String scoreLostMonth;
 
     public void initialize()
     {
         initData();
         configureElements();
         enableTooltips();
+        weekButton.fire();
         logger.info("Controller " + getClass().getSimpleName() + " loaded");
     }
 
     @Override
     public void initData()
     {
+        passTaskWeek = DEFAULT_VALUE;
+        missTaskWeek = DEFAULT_VALUE;
+        scoreReceivedWeek = DEFAULT_VALUE;
+        scoreLostWeek = DEFAULT_VALUE;
+        passTaskMonth = DEFAULT_VALUE;
+        missTaskMonth = DEFAULT_VALUE;
+        scoreReceivedMonth = DEFAULT_VALUE;
+        scoreLostMonth = DEFAULT_VALUE;
         logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
@@ -124,34 +145,78 @@ public class StatisticMenuController implements FrameControllerBaseIF
     }
     private void displayWeekStatistic()
     {
-        if (!isLoadedWeekStatistic()) weekStatistic = dayCache.getWeekStatistic(LocalDateTime.now());
-        countTaskDoneLabel.setText(String.valueOf(weekStatistic.size()));
-        countTaskFailLabel
-                .setText(
-                        String.valueOf(
-                                weekStatistic
+
+        if (!isStatisticForWeekDisplayed())
+        {
+            if (!isLoadedWeekStatistic()) weekStatistic = dayCache
+                    .getWeekStatistic(LocalDateTime.now())
+                    .stream()
+                    .filter(statisticClass -> !statisticClass.getMark().equals(MarkForTask.MARK_F))
+                    .collect(Collectors.toList());
+            final Integer present = weekStatistic.size();
+            passTaskWeek = String.valueOf(present);
+            final Long allTask = dayCache
+                                        .getWeekProxyCompositeTasks(LocalDateTime.now())
                                         .stream()
-                                        .map(statisticClass -> statisticClass.getCompositeKey().getProxyCompositeTask())
-                                        .distinct()
                                         .flatMap(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getChildren().stream())
-                                        .count() - weekStatistic.size()
-                        )
-                );
+                                        .count();
+            missTaskWeek = String.valueOf(allTask - present);
+            final Integer receive = weekStatistic
+                                        .stream()
+                                        .mapToInt(statisticClass -> Math.round(statisticClass.getMark().getMark()*statisticClass.getCompositeKey().getCompositeTask().getScore()))
+                                        .sum();
+            scoreReceivedWeek = String.valueOf(receive);
+            final Integer all = dayCache.getWeekProxyCompositeTasks(LocalDateTime.now())
+                                    .stream()
+                                    .mapToInt(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getScore())
+                                    .sum();
+            scoreLostWeek = String.valueOf(all - receive);
+        }
+        setAllStatisticInLabel(passTaskWeek, missTaskWeek, scoreReceivedWeek, scoreLostWeek);
     }
     private void displayMonthStatistic()
     {
-        if (!isLoadedMonthStatistic()) monthStatistic = dayCache.getMonthStatistic(LocalDateTime.now());
-        countTaskDoneLabel.setText(String.valueOf(monthStatistic.size()));
-        countTaskFailLabel
-                .setText(
-                        String.valueOf(
-                                monthStatistic
+        if (!isStatisticForMonthDisplayed()) {
+            if (!isLoadedMonthStatistic()) monthStatistic = dayCache
+                    .getMonthStatistic(LocalDateTime.now())
+                    .stream()
+                    .filter(statisticClass -> !statisticClass.getMark().equals(MarkForTask.MARK_F))
+                    .collect(Collectors.toList());
+            final Integer present = monthStatistic.size();
+            passTaskMonth = String.valueOf(present);
+            final Long allTask = dayCache
+                                    .getMonthProxyCompositeTasks(LocalDateTime.now())
+                                    .stream()
+                                    .flatMap(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getChildren().stream())
+                                    .count();
+            missTaskMonth = String.valueOf(allTask - present);
+            final Integer receive = monthStatistic
                                         .stream()
-                                        .map(statisticClass -> statisticClass.getCompositeKey().getProxyCompositeTask())
-                                        .distinct()
-                                        .flatMap(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getChildren().stream())
-                                        .count() - monthStatistic.size()
-                        )
-                );
+                                        .mapToInt(statisticClass -> Math.round(statisticClass.getMark().getMark()*statisticClass.getCompositeKey().getCompositeTask().getScore()))
+                                        .sum();
+            scoreReceivedMonth = String.valueOf(receive);
+            final Integer all = dayCache
+                    .getWeekProxyCompositeTasks(LocalDateTime.now())
+                    .stream()
+                    .mapToInt(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getScore())
+                    .sum();
+            scoreLostMonth = String.valueOf(all - receive);
+        }
+        setAllStatisticInLabel(passTaskMonth, missTaskMonth, scoreReceivedMonth, scoreLostMonth);
+    }
+    private boolean isStatisticForWeekDisplayed()
+    {
+        return !passTaskWeek.equals(DEFAULT_VALUE);
+    }
+    private boolean isStatisticForMonthDisplayed()
+    {
+        return !passTaskMonth.equals(DEFAULT_VALUE);
+    }
+    private void setAllStatisticInLabel(String passTask, String missTask, String scoreReceived, String scoreLost)
+    {
+        countTaskDoneLabel.setText(passTask);
+        countTaskFailLabel.setText(missTask);
+        countScoreReceiveLabel.setText(scoreReceived);
+        countScoreLostLabel.setText(scoreLost);
     }
 }
