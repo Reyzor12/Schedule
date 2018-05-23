@@ -1,9 +1,13 @@
 package ru.eleron.osa.lris.schedule.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
@@ -11,6 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
+import ru.eleron.osa.lris.schedule.database.dao.StatisticClassDao;
 import ru.eleron.osa.lris.schedule.database.entities.MarkForTask;
 import ru.eleron.osa.lris.schedule.database.entities.StatisticClass;
 import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
@@ -18,10 +24,15 @@ import ru.eleron.osa.lris.schedule.utils.frame.FadeNodeControl;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 import ru.eleron.osa.lris.schedule.utils.frame.ScenesInApplication;
 import ru.eleron.osa.lris.schedule.utils.load.SpringFxmlLoader;
+import ru.eleron.osa.lris.schedule.utils.message.MessageUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +46,7 @@ import java.util.stream.Collectors;
 public class StatisticMenuController implements FrameControllerBaseIF
 {
     private static final Logger logger = LogManager.getLogger(StatisticMenuController.class);
-    private static final String DEFAULT_VALUE = "";
+    private static final String DEFAULT_VALUE = "0";
 
     @FXML
     private Button weekButton;
@@ -62,6 +73,12 @@ public class StatisticMenuController implements FrameControllerBaseIF
     private SpringFxmlLoader springFxmlLoader;
     @Autowired
     private DayCache dayCache;
+    @Autowired
+    private MessageUtils messageUtils;
+    @Autowired
+    private StatisticClassDao statisticClassDao;
+    @Autowired
+    private ProxyCompositeTaskDao proxyCompositeTaskDao;
 
     private List<StatisticClass> weekStatistic;
     private List<StatisticClass> monthStatistic;
@@ -73,6 +90,12 @@ public class StatisticMenuController implements FrameControllerBaseIF
     private String missTaskMonth;
     private String scoreReceivedMonth;
     private String scoreLostMonth;
+    private Map<LocalDate, Long> weekMap;
+    private Map<LocalDate, Long> monthMap;
+    private XYChart.Series<String,Number> chartData;
+    private ObservableList<XYChart.Data<String,Number>> observableList;
+    private List<XYChart.Data<String,Number>> weekPoints;
+    private List<XYChart.Data<String,Number>> monthPoints;
 
     public void initialize()
     {
@@ -94,6 +117,11 @@ public class StatisticMenuController implements FrameControllerBaseIF
         missTaskMonth = DEFAULT_VALUE;
         scoreReceivedMonth = DEFAULT_VALUE;
         scoreLostMonth = DEFAULT_VALUE;
+        weekMap = new HashMap<>();
+        monthMap = new HashMap<>();
+        chartData = new XYChart.Series<>();
+        observableList = FXCollections.observableArrayList();
+        chartData.setData(observableList);
         logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
@@ -128,10 +156,15 @@ public class StatisticMenuController implements FrameControllerBaseIF
     public void clearAllStatistic(ActionEvent event)
     {
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
+        Optional<ButtonType> result = messageUtils.showOptionMessage("Предупреждение", "Хотите ли вы обнулить всю статистику?", "Да");
+        if (result.get().equals(messageUtils.getButtonTypeAgree()))
+        {
+            clearStatistic();
+        }
     }
     public void showGraphic(ActionEvent event)
     {
-        fadeNodeControl.changeSceneWithFade(statisticAnchorPane, (Node)springFxmlLoader.load(ScenesInApplication.STATISTIC_GRAPH.getUrl()));
+        fadeNodeControl.changeSceneWithFade(statisticAnchorPane, (Node)springFxmlLoader.load(ScenesInApplication.STATISTIC_GRAPH.getUrl(), chartData));
         logger.info("Button " + ((Button)event.getSource()).getText() + " is clicked");
     }
 
@@ -148,11 +181,18 @@ public class StatisticMenuController implements FrameControllerBaseIF
 
         if (!isStatisticForWeekDisplayed())
         {
-            if (!isLoadedWeekStatistic()) weekStatistic = dayCache
-                    .getWeekStatistic(LocalDateTime.now())
-                    .stream()
-                    .filter(statisticClass -> !statisticClass.getMark().equals(MarkForTask.MARK_F))
-                    .collect(Collectors.toList());
+            if (!isLoadedWeekStatistic()) {
+                weekStatistic = dayCache
+                        .getWeekStatistic(LocalDateTime.now())
+                        .stream()
+                        .filter(statisticClass -> !statisticClass.getMark().equals(MarkForTask.MARK_F))
+                        .collect(Collectors.toList());
+                dayCache.getWeekProxyCompositeTasks(LocalDateTime.now()).stream().forEach(proxyCompositeTask -> {
+                    weekMap.put(proxyCompositeTask.getDate().toLocalDate(), weekStatistic.stream().filter(statisticClass -> statisticClass.getCompositeKey().getProxyCompositeTask().equals(proxyCompositeTask)).count());
+                });
+                formedWeekPointList();
+            }
+
             final Integer present = weekStatistic.size();
             passTaskWeek = String.valueOf(present);
             final Long allTask = dayCache
@@ -173,15 +213,23 @@ public class StatisticMenuController implements FrameControllerBaseIF
             scoreLostWeek = String.valueOf(all - receive);
         }
         setAllStatisticInLabel(passTaskWeek, missTaskWeek, scoreReceivedWeek, scoreLostWeek);
+        observableList.setAll(weekPoints);
     }
     private void displayMonthStatistic()
     {
         if (!isStatisticForMonthDisplayed()) {
-            if (!isLoadedMonthStatistic()) monthStatistic = dayCache
-                    .getMonthStatistic(LocalDateTime.now())
-                    .stream()
-                    .filter(statisticClass -> !statisticClass.getMark().equals(MarkForTask.MARK_F))
-                    .collect(Collectors.toList());
+            if (!isLoadedMonthStatistic())
+            {
+                monthStatistic = dayCache
+                        .getMonthStatistic(LocalDateTime.now())
+                        .stream()
+                        .filter(statisticClass -> !statisticClass.getMark().equals(MarkForTask.MARK_F))
+                        .collect(Collectors.toList());
+                dayCache.getMonthProxyCompositeTasks(LocalDateTime.now()).stream().forEach(proxyCompositeTask -> {
+                    monthMap.put(proxyCompositeTask.getDate().toLocalDate(), monthStatistic.stream().filter(statisticClass -> statisticClass.getCompositeKey().getProxyCompositeTask().equals(proxyCompositeTask)).count());
+                });
+                formedMonthPointList();
+            }
             final Integer present = monthStatistic.size();
             passTaskMonth = String.valueOf(present);
             final Long allTask = dayCache
@@ -203,6 +251,7 @@ public class StatisticMenuController implements FrameControllerBaseIF
             scoreLostMonth = String.valueOf(all - receive);
         }
         setAllStatisticInLabel(passTaskMonth, missTaskMonth, scoreReceivedMonth, scoreLostMonth);
+        observableList.setAll(monthPoints);
     }
     private boolean isStatisticForWeekDisplayed()
     {
@@ -218,5 +267,29 @@ public class StatisticMenuController implements FrameControllerBaseIF
         countTaskFailLabel.setText(missTask);
         countScoreReceiveLabel.setText(scoreReceived);
         countScoreLostLabel.setText(scoreLost);
+    }
+    private void formedWeekPointList()
+    {
+        weekPoints = weekMap
+                .entrySet()
+                .stream()
+                .map(entry -> new XYChart.Data<String,Number>(entry.getKey().toString(), entry.getValue()))
+                .collect(Collectors.toList());
+    }
+    private void formedMonthPointList()
+    {
+        monthPoints = monthMap
+                .entrySet()
+                .stream()
+                .map(entry -> new XYChart.Data<String,Number>(entry.getKey().toString(), entry.getValue()))
+                .collect(Collectors.toList());
+    }
+    private void clearStatistic()
+    {
+        statisticClassDao.deleteAll();
+        proxyCompositeTaskDao.deleteAll();
+        dayCache.dayCacheClear();
+        initData();
+        setAllStatisticInLabel(DEFAULT_VALUE,DEFAULT_VALUE,DEFAULT_VALUE,DEFAULT_VALUE);
     }
 }

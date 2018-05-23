@@ -122,7 +122,7 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
                 if (empty || item == null) {
                     setText(null);
                 } else {
-                    setText(item.getName() + " " + item.getTime() + "c " + item.getScore());
+                    setText(item.getName() + " " + item.getTime() + "м " + item.getScore());
                 }
             }
         });

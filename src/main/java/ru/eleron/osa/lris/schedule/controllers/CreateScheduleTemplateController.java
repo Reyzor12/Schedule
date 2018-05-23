@@ -107,7 +107,7 @@ public class CreateScheduleTemplateController implements FrameControllerBaseIF
                 {
                     setText(null);
                 } else {
-                    setText(task.getName() + " " + task.getTime() + "c " + task.getScore());
+                    setText(task.getName() + " " + task.getTime() + "м " + task.getScore());
                 }
             }
         });
