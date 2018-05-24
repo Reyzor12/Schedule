@@ -166,6 +166,19 @@ public class DayCache {
         return monthProxyCompositeTasks != null;
     }
 
+    public void dayCacheClear()
+    {
+        this.templateScheduleForDay = null;
+        this.scheduleForDay = null;
+        this.marksForTask = new ArrayList<>();
+        this.taskWithTime = null;
+        this.isTaskInSchedule = false;
+        this.weekProxyCompositeTasks = null;
+        this.monthProxyCompositeTasks = null;
+        this.weekStatistic = null;
+        this.monthStatistic = null;
+    }
+
     @Override
     public String toString() {
         return "DayCache{" +

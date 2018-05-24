@@ -99,7 +99,7 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
     public void configureElements() {
         templatesListView.setPlaceholder(new Label(ConstantsForElements.EMPTY_CURRENT_TASK_TABLE.getMessage()));
 
-        spinner = new SpinnerForSchedule(Arrays.asList(8.00d,8.30d, 9.00d));
+        spinner = new SpinnerForSchedule(Arrays.asList(8.00d,8.30d, 9.00d, 9.30d));
         deviderImageView.setImage(new Image(getClass().getClassLoader().getResource(ConstantsForElements.DEVISION.getMessage()).toString()));
         setSpinnerTime(spinner.getCurrentValue());
         decreaseButton.setDisable(true);

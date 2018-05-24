@@ -3,6 +3,7 @@ package ru.eleron.osa.lris.schedule.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +11,13 @@ import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.entities.MarkForTask;
 import ru.eleron.osa.lris.schedule.database.entities.StatisticClass;
 import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
+import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseDelegeteIF;
 import ru.eleron.osa.lris.schedule.utils.frame.FrameControllerBaseIF;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -29,21 +29,21 @@ import java.util.stream.Collectors;
  */
 
 @Component
-public class StatisticGraphController implements FrameControllerBaseIF
+public class StatisticGraphController implements FrameControllerBaseDelegeteIF
 {
     private static final Logger logger = LogManager.getLogger(StatisticGraphController.class);
 
     @FXML
-    private LineChart<Date, Number> statisticBarChar;
+    private LineChart<String, Number> statisticBarChar;
     @FXML
     private Axis<Number> yAxis;
     @FXML
-    private Axis<Date> xAxis;
+    private Axis<String> xAxis;
 
     @Autowired
     private DayCache dayCache;
 
-    private Map<Date, Long> weekMap;
+    private XYChart.Series<String, Number> chartData;
 
     public void initialize()
     {
@@ -56,11 +56,6 @@ public class StatisticGraphController implements FrameControllerBaseIF
     @Override
     public void initData()
     {
-        weekMap = new HashMap<>();
-        List<StatisticClass> weekStatistic = dayCache.getWeekStatistic(LocalDateTime.now()).stream().filter(statisticClass -> !statisticClass.getMark().equals(MarkForTask.MARK_F)).collect(Collectors.toList());
-        dayCache.getWeekProxyCompositeTasks(LocalDateTime.now()).stream().forEach(proxyCompositeTask -> {
-            weekMap.put(Date.from(proxyCompositeTask.getDate().atZone(ZoneId.systemDefault()).toInstant()), weekStatistic.stream().filter(statisticClass -> statisticClass.getCompositeKey().getProxyCompositeTask().equals(proxyCompositeTask)).count());
-        });
         logger.info("initData in " + this.getClass().getSimpleName() + " loaded");
     }
 
@@ -75,5 +70,11 @@ public class StatisticGraphController implements FrameControllerBaseIF
     public void enableTooltips()
     {
 
+    }
+
+    @Override
+    public void delegete(Object object) {
+        chartData = (XYChart.Series<String, Number>) object;
+        statisticBarChar.getData().setAll(chartData);
     }
 }
