@@ -6,11 +6,8 @@
         <Property name="file-name">${log-path}/fileLog.log</Property>
     </Properties>
     <Appenders>
-        <Console name="Console-Appender" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%highlight{%-4level}{FATAL=bg_red, ERROR=red, WARN=yellow, INFO=green, DEBUG=blue}]%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %m%n"/>
-        </Console>
-        <RollingFile name="RollingFile-Appender" fileName="${log4j:configParentLocation}/${log-path}/logFile.log"
-                     filePattern="${log4j:configParentLocation}/${log-path}/$${date:yyyy-MM}/logFile-%d{MM-dd-yyyy}-%i.log.gz">
+        <RollingFile name="RollingFile-Appender" fileName="${log-path}/logFile.log"
+                     filePattern="${log-path}/$${date:yyyy-MM}/logFile-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
                 <Pattern>[%-4level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %m%n</Pattern>
             </PatternLayout>
@@ -21,11 +18,8 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Logger name="ru.eleron.osa.lris.otcenka" level="debug">
+        <Logger name="ru.eleron.osa.lris.schedule" level="all">
             <AppenderRef ref="RollingFile-Appender"/>
         </Logger>
-        <Root level="info">
-            <AppenderRef ref="Console-Appender"/>
-        </Root>
     </Loggers>
 </Configuration>
