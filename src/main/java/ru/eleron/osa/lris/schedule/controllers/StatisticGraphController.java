@@ -67,7 +67,7 @@ public class StatisticGraphController implements FrameControllerBaseIF
     @Override
     public void configureElements()
     {
-        
+
         logger.info("configureElements in " + this.getClass().getSimpleName() + " done");
     }
 
