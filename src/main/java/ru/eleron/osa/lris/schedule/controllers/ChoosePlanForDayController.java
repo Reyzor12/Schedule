@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
+import ru.eleron.osa.lris.schedule.database.entities.TypeOfCompositeTask;
 import ru.eleron.osa.lris.schedule.logic.scheduler.ScheduleForUser;
 import ru.eleron.osa.lris.schedule.utils.cache.DayCache;
 import ru.eleron.osa.lris.schedule.utils.cache.ObservableData;
@@ -182,7 +183,9 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
 
         createdProxyCompositeTask.setName(selectedDayTemplate.getName());
         createdProxyCompositeTask.setDate(LocalDate.now().atTime(spinner.getHour(), spinner.getMinute()));
-        createdProxyCompositeTask.setCompositeTask(selectedDayTemplate);
+        final CompositeTask cloneSelectedDayTemplate = selectedDayTemplate.clone();
+        cloneSelectedDayTemplate.setType(TypeOfCompositeTask.DAY_EXAMPLE);
+        createdProxyCompositeTask.setCompositeTask(cloneSelectedDayTemplate);
 
         CompletableFuture
                 .supplyAsync(() ->

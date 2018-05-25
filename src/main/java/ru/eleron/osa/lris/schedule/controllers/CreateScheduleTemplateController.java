@@ -146,7 +146,10 @@ public class CreateScheduleTemplateController implements FrameControllerBaseIF
     {
         final CompositeTask selectedCompositeTask = compositeTaskListView.getSelectionModel().getSelectedItem();
         CompletableFuture
-                .supplyAsync(() -> dayCache.getTemplateScheduleForDay().equals(selectedCompositeTask)?true:false)
+                .supplyAsync(() -> {
+                    if (dayCache.getTemplateScheduleForDay() == null) return false;
+                    return dayCache.getTemplateScheduleForDay().equals(selectedCompositeTask)?true:false;
+                })
                 .exceptionally(e ->
                 {
                     logger.info("Error then delete task " + selectedCompositeTask, e);
