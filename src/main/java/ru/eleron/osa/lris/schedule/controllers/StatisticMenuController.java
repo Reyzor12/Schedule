@@ -80,6 +80,8 @@ public class StatisticMenuController implements FrameControllerBaseIF
     @Autowired
     private ProxyCompositeTaskDao proxyCompositeTaskDao;
 
+    private List<StatisticClass> allTaskStatistic;
+    private List<StatisticClass> allTaskStatisticMonth;
     private List<StatisticClass> weekStatistic;
     private List<StatisticClass> monthStatistic;
     private String passTaskWeek;
@@ -182,8 +184,8 @@ public class StatisticMenuController implements FrameControllerBaseIF
         if (!isStatisticForWeekDisplayed())
         {
             if (!isLoadedWeekStatistic()) {
-                weekStatistic = dayCache
-                        .getWeekStatistic(LocalDateTime.now())
+                allTaskStatistic = dayCache.getWeekStatistic(LocalDateTime.now());
+                weekStatistic = allTaskStatistic
                         .stream()
                         .filter(statisticClass -> !statisticClass.getMark().equals(MarkForTask.MARK_F))
                         .collect(Collectors.toList());
@@ -195,21 +197,18 @@ public class StatisticMenuController implements FrameControllerBaseIF
 
             final Integer present = weekStatistic.size();
             passTaskWeek = String.valueOf(present);
-            final Long allTask = dayCache
-                                        .getWeekProxyCompositeTasks(LocalDateTime.now())
-                                        .stream()
-                                        .flatMap(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getChildren().stream())
-                                        .count();
+            final Long allTask = allTaskStatistic.stream().count();
             missTaskWeek = String.valueOf(allTask - present);
             final Integer receive = weekStatistic
                                         .stream()
                                         .mapToInt(statisticClass -> Math.round(statisticClass.getMark().getMark()*statisticClass.getCompositeKey().getCompositeTask().getScore()))
                                         .sum();
             scoreReceivedWeek = String.valueOf(receive);
-            final Integer all = dayCache.getWeekProxyCompositeTasks(LocalDateTime.now())
-                                    .stream()
-                                    .mapToInt(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getScore())
-                                    .sum();
+            final Integer all = allTaskStatistic
+                    .stream()
+                    .mapToInt(statistic -> statistic.getCompositeKey().getCompositeTask().getScore())
+                    .sum();
+
             scoreLostWeek = String.valueOf(all - receive);
         }
         setAllStatisticInLabel(passTaskWeek, missTaskWeek, scoreReceivedWeek, scoreLostWeek);
@@ -220,8 +219,8 @@ public class StatisticMenuController implements FrameControllerBaseIF
         if (!isStatisticForMonthDisplayed()) {
             if (!isLoadedMonthStatistic())
             {
-                monthStatistic = dayCache
-                        .getMonthStatistic(LocalDateTime.now())
+                allTaskStatisticMonth = dayCache.getMonthStatistic(LocalDateTime.now());
+                monthStatistic = allTaskStatistic
                         .stream()
                         .filter(statisticClass -> !statisticClass.getMark().equals(MarkForTask.MARK_F))
                         .collect(Collectors.toList());
@@ -232,21 +231,16 @@ public class StatisticMenuController implements FrameControllerBaseIF
             }
             final Integer present = monthStatistic.size();
             passTaskMonth = String.valueOf(present);
-            final Long allTask = dayCache
-                                    .getMonthProxyCompositeTasks(LocalDateTime.now())
-                                    .stream()
-                                    .flatMap(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getChildren().stream())
-                                    .count();
+            final Integer allTask = allTaskStatisticMonth.size();
             missTaskMonth = String.valueOf(allTask - present);
             final Integer receive = monthStatistic
                                         .stream()
                                         .mapToInt(statisticClass -> Math.round(statisticClass.getMark().getMark()*statisticClass.getCompositeKey().getCompositeTask().getScore()))
                                         .sum();
             scoreReceivedMonth = String.valueOf(receive);
-            final Integer all = dayCache
-                    .getWeekProxyCompositeTasks(LocalDateTime.now())
+            final Integer all = allTaskStatisticMonth
                     .stream()
-                    .mapToInt(proxyCompositeTask -> proxyCompositeTask.getCompositeTask().getScore())
+                    .mapToInt(statistic -> statistic.getCompositeKey().getCompositeTask().getScore())
                     .sum();
             scoreLostMonth = String.valueOf(all - receive);
         }

@@ -13,6 +13,6 @@ public interface ProxyCompositeTaskDao extends CrudRepository<ProxyCompositeTask
     ProxyCompositeTask findByName(String name);
     @Query("FROM ProxyCompositeTask WHERE YEAR(date) = :year AND MONTH(date) = :month AND DAY(date) = :day")
     ProxyCompositeTask findByDate(@Param("year") Integer year, @Param("month") Integer month, @Param("day") Integer day);
-    @Query("FROM ProxyCompositeTask WHERE date between :start and :end and compositeTask.type=1")
+    @Query("FROM ProxyCompositeTask WHERE date between :start and :end and compositeTask.type=5")
     List<ProxyCompositeTask> findFromDateToDate(@Param("start") Date start,@Param("end") Date end);
 }
