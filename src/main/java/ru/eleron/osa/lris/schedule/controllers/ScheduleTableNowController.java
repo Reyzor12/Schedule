@@ -129,6 +129,19 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
         {
             compositeTaskInScheduleForToday.setAll(dayCache.getTemplateScheduleForDay().getChildren());
             wrapInTimeCompositeTaskMap.putAll(dayCache.getTaskWithTime());
+            dayCache.setMarksForTask(statisticClassDao.performedTask(proxyCompositeTaskForCurrentDay));
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH1");
+            if (isLastTaskTimeBeforeCurrentTime())
+            {
+                System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH2");
+                if (!dayCache.getTaskInSchedule())
+                {
+                    taskScheduler.schedule(scheduleForUser, new Date());
+                    dayCache.setTaskInSchedule(true);
+                }
+            } else {
+                messageUtils.showInfoMessage(ConstantsForElements.TASK_DONE_FOR_TODAY.getMessage());
+            }
         }
     }
 
@@ -146,6 +159,11 @@ public class ScheduleTableNowController implements FrameControllerBaseIF
     }
     private boolean isLastTaskTimeBeforeCurrentTime()
     {
+        System.out.println(wrapInTimeCompositeTaskMap);
+        System.out.println(dayCache.getTemplateScheduleForDay());
+        System.out.println(dayCache.getTemplateScheduleForDay().getChildren());
+        System.out.println(wrapInTimeCompositeTaskMap.get(dayCache.getTemplateScheduleForDay().getChildren().get(dayCache.getTemplateScheduleForDay().getChildren().size()-1)));
+        System.out.println(wrapInTimeCompositeTaskMap.get(dayCache.getTemplateScheduleForDay().getChildren().get(dayCache.getTemplateScheduleForDay().getChildren().size()-1)).getEnd());
         return wrapInTimeCompositeTaskMap.get(dayCache.getTemplateScheduleForDay().getChildren().get(dayCache.getTemplateScheduleForDay().getChildren().size()-1)).getEnd().isAfter(LocalTime.now());
     }
 }

@@ -275,13 +275,13 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
     private void saveDayTemplateInDatabase(CompositeTask compositeTaskTemp)
     {
         CompletableFuture
-                .runAsync(() -> compositeTaskDao.save(compositeTaskTemp))
+                .runAsync(() -> dayTemplateCompositeTaskObservableList.add(compositeTaskDao.save(compositeTaskTemp)))
                 .exceptionally(e -> {
                     logger.info("Error then save task " + compositeTaskTemp, e);
                     return null;
                 })
                 .thenRunAsync(() -> Platform.runLater(() -> {
-                    dayTemplateCompositeTaskObservableList.add(compositeTaskDao.getByName(compositeTaskTemp.getName()));
+                    //dayTemplateCompositeTaskObservableList.add(compositeTaskDao.getByName(compositeTaskTemp.getName()));
                     fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node)springFxmlLoader.load(ScenesInApplication.CREATE_SCHEDULE_TEMPLATE.getUrl()));
                 }));
     }

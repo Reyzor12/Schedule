@@ -33,6 +33,7 @@ import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForSchedule;
 import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForScheduleIF;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -206,10 +207,7 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
                 {
                     if (result)
                     {
-                        dayCache.setTemplateScheduleForDay(selectedDayTemplate);
-                        dayCache.setScheduleForDay(createdProxyCompositeTask);
-                        dayCache.setMarksForTask(statisticClassDao.performedTask(createdProxyCompositeTask));
-                        taskScheduler.schedule(scheduleForUser, new Date());
+                        dayCache.dayCacheClear();
                         fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
                     } else {
                         messageUtils.showInfoMessage("Не удалось сохранить проект");
