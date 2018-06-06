@@ -75,6 +75,7 @@ public class DayCache {
     public void setScheduleForDay(ProxyCompositeTask scheduleForDay)
     {
         this.scheduleForDay = scheduleForDay;
+        this.isTaskInSchedule = true;
         taskWithTime = new HashMap<>();
         AtomicReference<LocalTime> localTime = new AtomicReference<>(scheduleForDay.getDate().toLocalTime());
         scheduleForDay.getCompositeTask().getChildren().stream().forEach(compositeTask -> {

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 import ru.eleron.osa.lris.schedule.database.dao.ProxyCompositeTaskDao;
+import ru.eleron.osa.lris.schedule.database.dao.StatisticClassDao;
 import ru.eleron.osa.lris.schedule.database.entities.CompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.ProxyCompositeTask;
 import ru.eleron.osa.lris.schedule.database.entities.TypeOfCompositeTask;
@@ -33,6 +34,7 @@ import ru.eleron.osa.lris.schedule.utils.uielements.SpinnerForScheduleIF;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -74,9 +76,11 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
     @Autowired
     private ProxyCompositeTaskDao proxyCompositeTaskDao;
     @Autowired
-    private ThreadPoolTaskScheduler schedulerTask;
+    private ThreadPoolTaskScheduler taskScheduler;
     @Autowired
     private ScheduleForUser scheduleForUser;
+    @Autowired
+    private StatisticClassDao statisticClassDao;
 
     private ObservableList<CompositeTask> dayTemplateCompositeTaskList;
     private SpinnerForScheduleIF<Image> spinner;
@@ -204,6 +208,8 @@ public class ChoosePlanForDayController implements FrameControllerBaseIF{
                     {
                         dayCache.setTemplateScheduleForDay(selectedDayTemplate);
                         dayCache.setScheduleForDay(createdProxyCompositeTask);
+                        dayCache.setMarksForTask(statisticClassDao.performedTask(createdProxyCompositeTask));
+                        taskScheduler.schedule(scheduleForUser, new Date());
                         fadeNodeControl.changeSceneWithFade(mainMenuController.getInformationAnchorPane(), (Node) springFxmlLoader.load(ScenesInApplication.SCHEDULE_TABLE_NOW.getUrl()));
                     } else {
                         messageUtils.showInfoMessage("Не удалось сохранить проект");
