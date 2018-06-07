@@ -240,7 +240,9 @@ public class CreateScheduleMenuController implements FrameControllerBaseIF
 
     private void refreshLabelStatistic()
     {
-        timeLabel.setText(timeCompositeTask.toString());
+        Integer hours = timeCompositeTask / 60;
+        Integer minutes = timeCompositeTask % 60;
+        timeLabel.setText(hours + ":" + minutes);
         scoreLabel.setText(scoreCompositeTask.toString());
     }
 

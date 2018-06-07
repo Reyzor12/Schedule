@@ -79,6 +79,7 @@ public class ScheduleForUser implements Runnable
         //localTime = localTime.plusSeconds(5);
         TaskLoad task = (TaskLoad) MainApp.APPLICATION_CONTEXT.getBean("taskLoad");
         task.setCompositeTask(compositeTask);
+        scheduler.setDaemon(true);
         //scheduler.schedule(task, Date.from(localTime.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
         scheduler.schedule(task, Date.from(timeCompositeTask.getStart().atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant()));
     }

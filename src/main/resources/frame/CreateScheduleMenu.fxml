@@ -49,17 +49,17 @@
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-1" />
          </styleClass></Label>
-      <Label fx:id="timeLabel" layoutX="117.0" layoutY="357.0" prefHeight="16.0" prefWidth="49.0" text="120" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="145.0">
+      <Label fx:id="timeLabel" layoutX="117.0" layoutY="357.0" text="120" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="145.0">
          <styleClass>
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-5" />
          </styleClass></Label>
-      <Label layoutX="325.0" layoutY="349.0" text="Очки:" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="250.0">
+      <Label layoutX="325.0" layoutY="349.0" text="Очки:" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="290.0">
          <styleClass>
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-1" />
          </styleClass></Label>
-      <Label fx:id="scoreLabel" layoutX="474.0" layoutY="357.0" text="100" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="350.0">
+      <Label fx:id="scoreLabel" layoutX="474.0" layoutY="357.0" text="100" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="390.0">
          <styleClass>
             <String fx:value="default-label-text-1" />
             <String fx:value="label-text-5" />
